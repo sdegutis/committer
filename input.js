@@ -29,11 +29,11 @@ export function listen(callbacks) {
   gen.next(); // move to the first yield
 
   os.setReadHandler(std.in, () => {
-    const array = new Uint8Array(64);
-    const result = os.read(std.in, array.buffer, 0, array.length);
-    for (let i = 0; i < result; i++) {
-      const thing = array[i];
-      gen.next(thing);
+    const array = new Uint8Array(32);
+    const bytesRead = os.read(std.in, array.buffer, 0, array.length);
+    for (let i = 0; i < bytesRead; i++) {
+      const c = array[i];
+      gen.next(c);
     }
   });
 }
