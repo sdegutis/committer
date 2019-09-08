@@ -20,7 +20,9 @@ input.listen({
   moveDown: () => screen.moveDown(),
   moveLeft: () => screen.moveLeft(),
   char(c) {
-    screen.puts(String.fromCharCode(c));
+    screen.as([screen.style.fg.green], () => {
+      screen.puts(String.fromCharCode(c));
+    });
   },
   unhandled(chars) {
     screen.puts('unhandled: ' + chars.join(' '));
