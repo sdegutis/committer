@@ -24,6 +24,8 @@ export function clearLine() { puts(`${Esc}[2K`); }
 export function clearScreenFromCursorDown() { puts(`${Esc}[0J`); }
 export function clearScreenFromCursorUp() { puts(`${Esc}[1J`); }
 export function clearScreen() { puts(`${Esc}[2J`); }
+export function useAltScreen() { puts(`${Esc}[?1049h`); }
+export function useMainScreen() { puts(`${Esc}[?1049l`); }
 
 export const style = {
   reset: 0,
