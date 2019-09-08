@@ -4,7 +4,7 @@ import * as resizer from './resizer.js';
 import * as tty from './tty.js';
 
 tty.setup();
-screen.clearEntireScreen();
+screen.clearScreen();
 
 resizer.listen((width, height) => {
   screen.saveCursorPositionAndAttributes();
@@ -13,10 +13,10 @@ resizer.listen((width, height) => {
 });
 
 input.listen({
-  moveUp: () => screen.moveCursorUpLines(1),
-  moveRight: () => screen.moveCursorRightLines(1),
-  moveDown: () => screen.moveCursorDownLines(1),
-  moveLeft: () => screen.moveCursorLeftLines(1),
+  moveUp: () => screen.moveUp(),
+  moveRight: () => screen.moveRight(),
+  moveDown: () => screen.moveDown(),
+  moveLeft: () => screen.moveLeft(),
   char(c) {
     screen.puts(String.fromCharCode(c));
   },
@@ -26,8 +26,8 @@ input.listen({
 });
 
 function redraw(width, height) {
-  screen.clearEntireScreen();
-  screen.moveCursorToUpperLeftCorner();
+  screen.clearScreen();
+  screen.moveToTopLeft();
 
   print('width =', width);
   print('height =', height);
