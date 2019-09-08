@@ -1,3 +1,5 @@
+import * as os from 'os';
+import * as std from 'std';
 import * as screen from './screen.js';
 import * as input from './input.js';
 import * as resizer from './resizer.js';
@@ -32,10 +34,7 @@ function redraw(width, height) {
     for (let x = 1; x <= width; x++) {
       if (x === 1 || y === 1 || x === width || y === height) {
         screen.moveTo(y, x);
-
-        screen.as([screen.style.bg.blue], () => {
-          screen.puts(' ');
-        });
+        screen.as([screen.style.bg.blue], () => screen.puts(' '));
       }
     }
   }
@@ -47,3 +46,9 @@ function redraw(width, height) {
 }
 
 screen.moveTo(5, 3);
+
+os.signal(os.SIGINT, () => {
+  screen.moveToTopLeft();
+  screen.clearScreen();
+  std.exit(0);
+});
