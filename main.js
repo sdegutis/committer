@@ -27,8 +27,23 @@ input.listen({
 
 function redraw(width, height) {
   screen.clearScreen();
-  screen.moveToTopLeft();
 
-  print('width =', width);
-  print('height =', height);
+  for (let y = 1; y <= height; y++) {
+    for (let x = 1; x <= width; x++) {
+      if (x === 1 || y === 1 || x === width || y === height) {
+        screen.moveTo(y, x);
+
+        screen.as([screen.style.bg.blue], () => {
+          screen.puts(' ');
+        });
+      }
+    }
+  }
+
+  screen.as([screen.style.fg.red], () => {
+    screen.moveTo(3, 3); print('width =', width);
+    screen.moveTo(4, 3); print('height =', height);
+  });
 }
+
+screen.moveTo(5, 3);
