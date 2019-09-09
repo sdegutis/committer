@@ -10,11 +10,11 @@ function* handleCode(interpreter) {
       if (c === 91/* [ */) {
         c = yield;
         switch (c) {
-          case 65/* Up */: interpreter.handler().moveUp(); break;
+          case 65/* Up */:    interpreter.handler().moveUp(); break;
           case 67/* Right */: interpreter.handler().moveRight(); break;
-          case 66/* Down */: interpreter.handler().moveDown(); break;
-          case 68/* Left */: interpreter.handler().moveLeft(); break;
-          default: interpreter.handler().unhandled([27, 91, c]); break;
+          case 66/* Down */:  interpreter.handler().moveDown(); break;
+          case 68/* Left */:  interpreter.handler().moveLeft(); break;
+          default:            interpreter.handler().unhandled([27, 91, c]); break;
         }
       }
     }
