@@ -14,20 +14,20 @@ resizer.listen((width, height) => {
 
 input.listen(interpreter => {
   interpreter.push({
-    moveUp: () => screen.moveUp(),
-    moveRight: () => screen.moveRight(),
-    moveDown: () => screen.moveDown(),
-    moveLeft: () => screen.moveLeft(),
+    upArrow: () => screen.moveUp(),
+    rightArrow: () => screen.moveRight(),
+    downArrow: () => screen.moveDown(),
+    leftArrow: () => screen.moveLeft(),
     char(c) {
       c = String.fromCharCode(c);
 
       if (c === '\x06'/* ctrl-f */) {
 
         interpreter.push({
-          moveUp: () => { },
-          moveRight: () => { },
-          moveDown: () => { },
-          moveLeft: () => { },
+          upArrow: () => { },
+          rightArrow: () => { },
+          downArrow: () => { },
+          leftArrow: () => { },
           unhandled: (chars) => { },
           char: (c) => {
             c = String.fromCharCode(c);
