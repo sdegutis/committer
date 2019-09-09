@@ -33,7 +33,9 @@ export function pop() {
   modes.pop();
   top = modes[modes.length - 1]; // ok to be undefined
 
-  setInputHandlers(top.keyHandlers);
-  top.draw(width, height);
-  if (top.poppedTo) top.poppedTo();
+  if (top) {
+    setInputHandlers(top.keyHandlers);
+    top.draw(width, height);
+    if (top.poppedTo) top.poppedTo();
+  }
 }
