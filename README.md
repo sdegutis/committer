@@ -1,5 +1,5 @@
-Codename: Committer
-===================
+Committer
+=========
 
 *Like `magit-status`, but ported to QuickJS as a stand-alone executable*
 
@@ -28,3 +28,7 @@ Codename: Committer
 - [ ] figure out how magit unstages changes
 - [ ] figure out how magit discards regions
 - [ ] figure out how magit discards files
+
+## License
+
+MIT, with the added clause that you try to think seriously about the purpose of life
