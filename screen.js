@@ -28,33 +28,9 @@ export function useAltScreen()                       { puts(`${Esc}[?1049h`); }
 export function useMainScreen()                      { puts(`${Esc}[?1049l`); }
 
 export const style = {
-  reset: 0,
-  bright: 1,
-  dim: 2,
-  underscore: 4,
-  blink: 5,
-  reverse: 7,
-  hidden: 8,
-  fg: {
-    black: 30,
-    red: 31,
-    green: 32,
-    yellow: 33,
-    blue: 34,
-    magenta: 35,
-    cyan: 36,
-    white: 37,
-  },
-  bg: {
-    black: 40,
-    red: 41,
-    green: 42,
-    yellow: 43,
-    blue: 44,
-    magenta: 45,
-    cyan: 46,
-    white: 47,
-  },
+  reset: 0, bright: 1, dim: 2, underscore: 4, blink: 5, reverse: 7, hidden: 8,
+  fg: { black: 30, red: 31, green: 32, yellow: 33, blue: 34, magenta: 35, cyan: 36, white: 37, },
+  bg: { black: 40, red: 41, green: 42, yellow: 43, blue: 44, magenta: 45, cyan: 46, white: 47, },
 };
 
 export function color(...styles) { puts(`${Esc}[${styles.join(';')}m`); }
