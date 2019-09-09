@@ -19,7 +19,7 @@ function* handleCode(interpreter) {
       }
     }
     else {
-      interpreter.char(c);
+      interpreter.char(String.fromCharCode(c));
     }
   }
 }

@@ -18,8 +18,6 @@ function mainMode(width, height) {
     downArrow: () => screen.moveDown(),
     leftArrow: () => screen.moveLeft(),
     char(c) {
-      c = String.fromCharCode(c);
-
       if (c === '\x06'/* ctrl-f */) {
         modes.push(innerMode);
       }
@@ -73,7 +71,6 @@ function innerMode() {
     leftArrow: () => { },
     unhandled: (chars) => { },
     char: (c) => {
-      c = String.fromCharCode(c);
       if (c === '\x06') {
         modes.pop();
       }
