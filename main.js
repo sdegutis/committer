@@ -58,10 +58,19 @@ function mainMode(width, height) {
 }
 
 
-function innerMode() {
+function innerMode(width, height) {
 
-  function draw() {
+  draw(width, height);
 
+  function draw(width, height) {
+    for (let y = 20; y <= 40; y++) {
+      for (let x = 20; x <= 40; x++) {
+        if (x === 20 || y === 20 || x === 40 || y === 40) {
+          screen.moveTo(y, x);
+          screen.as([screen.style.bg.green], () => screen.puts(' '));
+        }
+      }
+    }
   }
 
   const keyHandlers = {
@@ -71,7 +80,7 @@ function innerMode() {
         modes.pop();
       }
       else {
-        screen.moveToTopLeft();
+        screen.moveTo(21, 21);
         screen.puts(c);
       }
     },
