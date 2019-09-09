@@ -1,12 +1,9 @@
-import * as os from 'os';
-import * as std from 'std';
 import * as screen from './screen.js';
 import * as input from './input.js';
 import * as resizer from './resizer.js';
 import * as tty from './tty.js';
 
 tty.setup();
-screen.useAltScreen();
 screen.clearScreen();
 
 resizer.listen((width, height) => {
@@ -76,8 +73,3 @@ function redraw(width, height) {
 }
 
 screen.moveTo(5, 3);
-
-os.signal(os.SIGINT, () => {
-  screen.useMainScreen();
-  std.exit(0);
-});
