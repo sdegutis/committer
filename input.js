@@ -1,7 +1,7 @@
 import * as std from 'std';
 import * as os from 'os';
 
-function* handleCode(handler) {
+function* handleCode(interpreter) {
   while (true) {
     let c = yield;
 
@@ -10,22 +10,45 @@ function* handleCode(handler) {
       if (c === 91/* [ */) {
         c = yield;
         switch (c) {
-          case 65/* Up */: handler.moveUp(); break;
-          case 67/* Right */: handler.moveRight(); break;
-          case 66/* Down */: handler.moveDown(); break;
-          case 68/* Left */: handler.moveLeft(); break;
-          default: handler.unhandled([27, 91, c]); break;
+          case 65/* Up */: interpreter.handler().moveUp(); break;
+          case 67/* Right */: interpreter.handler().moveRight(); break;
+          case 66/* Down */: interpreter.handler().moveDown(); break;
+          case 68/* Left */: interpreter.handler().moveLeft(); break;
+          default: interpreter.handler().unhandled([27, 91, c]); break;
         }
       }
     }
     else {
-      handler.char(c);
+      interpreter.handler().char(c);
     }
   }
 }
 
-export function listen(callbacks) {
-  const gen = handleCode(callbacks);
+class Interpreter {
+
+  constructor() {
+    this.handlers = [];
+  }
+
+  push(handler) {
+    this.handlers.push(handler);
+  }
+
+  pop() {
+    return this.handlers.pop();
+  }
+
+  handler() {
+    return this.handlers[this.handlers.length - 1];
+  }
+
+}
+
+export function listen(setupInterpreter) {
+  const interpreter = new Interpreter();
+  setupInterpreter(interpreter);
+
+  const gen = handleCode(interpreter);
   gen.next(); // move to the first yield
 
   os.setReadHandler(std.in, () => {

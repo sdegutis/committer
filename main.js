@@ -15,19 +15,46 @@ resizer.listen((width, height) => {
   screen.restoreCursorPositionAndAttributes();
 });
 
-input.listen({
-  moveUp: () => screen.moveUp(),
-  moveRight: () => screen.moveRight(),
-  moveDown: () => screen.moveDown(),
-  moveLeft: () => screen.moveLeft(),
-  char(c) {
-    screen.as([screen.style.fg.green], () => {
-      screen.puts(String.fromCharCode(c));
-    });
-  },
-  unhandled(chars) {
-    screen.puts('unhandled: ' + chars.join(' '));
-  },
+input.listen(interpreter => {
+  interpreter.push({
+    moveUp: () => screen.moveUp(),
+    moveRight: () => screen.moveRight(),
+    moveDown: () => screen.moveDown(),
+    moveLeft: () => screen.moveLeft(),
+    char(c) {
+      c = String.fromCharCode(c);
+
+      if (c === '\x06'/* ctrl-f */) {
+
+        interpreter.push({
+          moveUp: () => { },
+          moveRight: () => { },
+          moveDown: () => { },
+          moveLeft: () => { },
+          unhandled: (chars) => { },
+          char: (c) => {
+            c = String.fromCharCode(c);
+            if (c === '\x06') {
+              interpreter.pop();
+            }
+            else {
+              screen.moveToTopLeft();
+              screen.puts(c);
+            }
+          },
+        });
+
+      }
+      else {
+        screen.as([screen.style.fg.green], () => screen.puts(c));
+      }
+
+    },
+    unhandled(chars) {
+      screen.puts('unhandled: ' + chars.join(' '));
+    },
+  });
+
 });
 
 function redraw(width, height) {
