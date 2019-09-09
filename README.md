@@ -1,7 +1,7 @@
-Majit
-=====
+Codename: Committer
+===================
 
-*Like `magit-status`, but ported to QuickJS*
+*Like `magit-status`, but ported to QuickJS as a stand-alone executable*
 
 ---
 
