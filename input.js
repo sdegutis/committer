@@ -10,16 +10,16 @@ function* handleCode(interpreter) {
       if (c === 91/* [ */) {
         c = yield;
         switch (c) {
-          case 65/* Up */:    interpreter.handler().moveUp(); break;
-          case 67/* Right */: interpreter.handler().moveRight(); break;
-          case 66/* Down */:  interpreter.handler().moveDown(); break;
-          case 68/* Left */:  interpreter.handler().moveLeft(); break;
-          default:            interpreter.handler().unhandled([27, 91, c]); break;
+          case 65/* Up */:    interpreter.handler.moveUp(); break;
+          case 67/* Right */: interpreter.handler.moveRight(); break;
+          case 66/* Down */:  interpreter.handler.moveDown(); break;
+          case 68/* Left */:  interpreter.handler.moveLeft(); break;
+          default:            interpreter.handler.unhandled([27, 91, c]); break;
         }
       }
     }
     else {
-      interpreter.handler().char(c);
+      interpreter.handler.char(c);
     }
   }
 }
@@ -28,18 +28,17 @@ class Interpreter {
 
   constructor() {
     this.handlers = [];
+    this.handler = null;
   }
 
   push(handler) {
     this.handlers.push(handler);
+    this.handler = handler;
   }
 
   pop() {
-    return this.handlers.pop();
-  }
-
-  handler() {
-    return this.handlers[this.handlers.length - 1];
+    this.handlers.pop();
+    this.handler = this.handlers[this.handlers.length - 1];
   }
 
 }
