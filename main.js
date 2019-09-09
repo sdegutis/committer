@@ -65,10 +65,6 @@ function innerMode() {
   }
 
   const keyHandlers = {
-    upArrow: () => { },
-    rightArrow: () => { },
-    downArrow: () => { },
-    leftArrow: () => { },
     unhandled: (chars) => { },
     char: (c) => {
       if (c === '\x06') {
