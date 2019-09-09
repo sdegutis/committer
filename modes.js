@@ -6,15 +6,14 @@ const modes = [];
 let top;
 let setInputHandlers;
 
-let width;
-let height;
+const window = {};
 
 export function setup() {
   resizer.listen((w, h) => {
-    width = w;
-    height = h;
+    window.width = w;
+    window.height = h;
     screen.saveCursorPositionAndAttributes();
-    top && top.draw(width, height);
+    top && top.draw();
     screen.restoreCursorPositionAndAttributes();
   });
 
@@ -22,7 +21,7 @@ export function setup() {
 }
 
 export function push(startMode) {
-  top = startMode(width, height);
+  top = startMode(window);
   modes.push(top);
 
   setInputHandlers(top.keyHandlers);
@@ -38,7 +37,7 @@ export function pop() {
 
   if (top) {
     setInputHandlers(top.keyHandlers);
-    top.draw(width, height);
+    top.draw();
     if (top.poppedTo) top.poppedTo();
   }
 }

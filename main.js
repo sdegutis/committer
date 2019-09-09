@@ -8,8 +8,8 @@ modes.setup();
 modes.push(mainMode);
 
 
-function mainMode(width, height) {
-  draw(width, height);
+function mainMode(window) {
+  draw();
   screen.moveTo(5, 3);
 
   const keyHandlers = {
@@ -31,12 +31,12 @@ function mainMode(width, height) {
     },
   };
 
-  function draw(width, height) {
+  function draw() {
     screen.clearScreen();
 
-    for (let y = 1; y <= height; y++) {
-      for (let x = 1; x <= width; x++) {
-        if (x === 1 || y === 1 || x === width || y === height) {
+    for (let y = 1; y <= window.height; y++) {
+      for (let x = 1; x <= window.width; x++) {
+        if (x === 1 || y === 1 || x === window.width || y === window.height) {
           screen.moveTo(y, x);
           screen.as([screen.style.bg.blue], () => screen.puts(' '));
         }
@@ -44,8 +44,8 @@ function mainMode(width, height) {
     }
 
     screen.as([screen.style.fg.red], () => {
-      screen.moveTo(3, 3); print('width =', width);
-      screen.moveTo(4, 3); print('height =', height);
+      screen.moveTo(3, 3); print('window.width =', window.width);
+      screen.moveTo(4, 3); print('window.height =', window.height);
     });
   }
 
@@ -58,11 +58,11 @@ function mainMode(width, height) {
 }
 
 
-function innerMode(width, height) {
+function innerMode(window) {
 
-  draw(width, height);
+  draw();
 
-  function draw(width, height) {
+  function draw() {
     for (let y = 20; y <= 40; y++) {
       for (let x = 20; x <= 40; x++) {
         if (x === 20 || y === 20 || x === 40 || y === 40) {
