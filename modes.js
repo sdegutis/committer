@@ -12,8 +12,11 @@ export function setup() {
   resizer.listen((w, h) => {
     window.width = w;
     window.height = h;
+
     screen.saveCursorPositionAndAttributes();
-    top && top.draw();
+    for (const mode of modes) {
+      mode.draw();
+    }
     screen.restoreCursorPositionAndAttributes();
   });
 
