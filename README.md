@@ -17,7 +17,7 @@ Majit
   - [ ] map flags to arguments
   - [ ] map characters to commands
   - [ ] handle invalid characters
-  - [ ] make input.listen() take a stack-ish
+  - [x] make input.listen() take a stack-ish
 - [ ] wait for os.exec() in QuickJS
 - [ ] wrap os.exec() for convenience
 - [ ] figure out the extra args magit means by `"..."`
