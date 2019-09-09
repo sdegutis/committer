@@ -13,10 +13,10 @@ function mainMode(width, height) {
   screen.moveTo(5, 3);
 
   const keyHandlers = {
-    upArrow: () => screen.moveUp(),
+    upArrow:    () => screen.moveUp(),
     rightArrow: () => screen.moveRight(),
-    downArrow: () => screen.moveDown(),
-    leftArrow: () => screen.moveLeft(),
+    downArrow:  () => screen.moveDown(),
+    leftArrow:  () => screen.moveLeft(),
     char(c) {
       if (c === '\x06'/* ctrl-f */) {
         modes.push(innerMode);
