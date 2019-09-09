@@ -86,5 +86,9 @@ function innerMode(width, height) {
     },
   };
 
-  return { draw, keyHandlers };
+  const leave = () => {
+    tty.exit();
+  };
+
+  return { draw, keyHandlers, leave };
 }

@@ -15,8 +15,10 @@ export function setup() {
   screen.useAltScreen();
 
   // Restore main screen on exit
-  os.signal(os.SIGINT, () => {
-    screen.useMainScreen();
-    std.exit(0);
-  });
+  os.signal(os.SIGINT, exit);
+}
+
+export function exit(code = 0) {
+  screen.useMainScreen();
+  std.exit(code);
 }

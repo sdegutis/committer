@@ -30,7 +30,10 @@ export function push(startMode) {
 }
 
 export function pop() {
-  modes.pop();
+  const old = modes.pop();
+
+  if (old.leave) old.leave();
+
   top = modes[modes.length - 1]; // ok to be undefined
 
   if (top) {
