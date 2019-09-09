@@ -1,19 +1,18 @@
 import * as screen from './screen.js';
-import * as input from './input.js';
-import * as resizer from './resizer.js';
 import * as tty from './tty.js';
+import * as modes from './modes.js';
 
 tty.setup();
-screen.clearScreen();
 
-resizer.listen((width, height) => {
-  screen.saveCursorPositionAndAttributes();
-  redraw(width, height);
-  screen.restoreCursorPositionAndAttributes();
-});
+modes.setup();
+modes.push(mainMode);
 
-input.listen(interpreter => {
-  interpreter.push({
+
+function mainMode(width, height) {
+  draw(width, height);
+  screen.moveTo(5, 3);
+
+  const keyHandlers = {
     upArrow: () => screen.moveUp(),
     rightArrow: () => screen.moveRight(),
     downArrow: () => screen.moveDown(),
@@ -22,25 +21,7 @@ input.listen(interpreter => {
       c = String.fromCharCode(c);
 
       if (c === '\x06'/* ctrl-f */) {
-
-        interpreter.push({
-          upArrow: () => { },
-          rightArrow: () => { },
-          downArrow: () => { },
-          leftArrow: () => { },
-          unhandled: (chars) => { },
-          char: (c) => {
-            c = String.fromCharCode(c);
-            if (c === '\x06') {
-              interpreter.pop();
-            }
-            else {
-              screen.moveToTopLeft();
-              screen.puts(c);
-            }
-          },
-        });
-
+        modes.push(innerMode);
       }
       else {
         screen.as([screen.style.fg.green], () => screen.puts(c));
@@ -50,26 +31,58 @@ input.listen(interpreter => {
     unhandled(chars) {
       screen.puts('unhandled: ' + chars.join(' '));
     },
-  });
+  };
 
-});
+  function draw(width, height) {
+    screen.clearScreen();
 
-function redraw(width, height) {
-  screen.clearScreen();
-
-  for (let y = 1; y <= height; y++) {
-    for (let x = 1; x <= width; x++) {
-      if (x === 1 || y === 1 || x === width || y === height) {
-        screen.moveTo(y, x);
-        screen.as([screen.style.bg.blue], () => screen.puts(' '));
+    for (let y = 1; y <= height; y++) {
+      for (let x = 1; x <= width; x++) {
+        if (x === 1 || y === 1 || x === width || y === height) {
+          screen.moveTo(y, x);
+          screen.as([screen.style.bg.blue], () => screen.puts(' '));
+        }
       }
     }
+
+    screen.as([screen.style.fg.red], () => {
+      screen.moveTo(3, 3); print('width =', width);
+      screen.moveTo(4, 3); print('height =', height);
+    });
   }
 
-  screen.as([screen.style.fg.red], () => {
-    screen.moveTo(3, 3); print('width =', width);
-    screen.moveTo(4, 3); print('height =', height);
-  });
+
+  return {
+    draw,
+    keyHandlers,
+    poppedTo: () => screen.moveTo(5, 3),
+  };
 }
 
-screen.moveTo(5, 3);
+
+function innerMode() {
+
+  function draw() {
+
+  }
+
+  const keyHandlers = {
+    upArrow: () => { },
+    rightArrow: () => { },
+    downArrow: () => { },
+    leftArrow: () => { },
+    unhandled: (chars) => { },
+    char: (c) => {
+      c = String.fromCharCode(c);
+      if (c === '\x06') {
+        modes.pop();
+      }
+      else {
+        screen.moveToTopLeft();
+        screen.puts(c);
+      }
+    },
+  };
+
+  return { draw, keyHandlers };
+}
