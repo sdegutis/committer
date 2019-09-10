@@ -1,3 +1,7 @@
+// TODO: The "modes" concept is not quite right yet.
+//       It needs to be smarter about redrawing the
+//       the whole thing, vs drawing just a portion.
+
 import * as screen from './screen.js';
 import * as tty from './tty.js';
 import * as modes from './modes.js';
