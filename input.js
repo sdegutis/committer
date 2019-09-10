@@ -10,32 +10,37 @@ function* handleCode(interpreter) {
       if (c === 91/* [ */) {
         c = yield;
         switch (c) {
-          case 65/* Up */:    interpreter.upArrow();              break;
-          case 67/* Right */: interpreter.rightArrow();           break;
-          case 66/* Down */:  interpreter.downArrow();            break;
-          case 68/* Left */:  interpreter.leftArrow();            break;
-          default:            interpreter.unhandled([27, 91, c]); break;
+          case 65/* Up */:    interpreter.handlers.upArrow();              break;
+          case 67/* Right */: interpreter.handlers.rightArrow();           break;
+          case 66/* Down */:  interpreter.handlers.downArrow();            break;
+          case 68/* Left */:  interpreter.handlers.leftArrow();            break;
+          default:            interpreter.handlers.unhandled([27, 91, c]); break;
         }
       }
     }
     else {
-      interpreter.char(String.fromCharCode(c));
+      interpreter.handlers.char(String.fromCharCode(c));
     }
   }
 }
 
+const noop = () => {};
+const baseHandlers = {
+  upArrow:    noop,
+  downArrow:  noop,
+  rightArrow: noop,
+  leftArrow:  noop,
+  unhandled:  noop,
+  char:       noop,
+}
+
 export function listen() {
-  const noop = () => {};
   const interpreter = {};
+  interpreter.handlers = baseHandlers;
+
   const set = (handlers) => {
-    interpreter.upArrow    = handlers.upArrow    || noop;
-    interpreter.downArrow  = handlers.downArrow  || noop;
-    interpreter.rightArrow = handlers.rightArrow || noop;
-    interpreter.leftArrow  = handlers.leftArrow  || noop;
-    interpreter.unhandled  = handlers.unhandled  || noop;
-    interpreter.char       = handlers.char       || noop;
+    interpreter.handlers = Object.setPrototypeOf(handlers, baseHandlers);
   };
-  set({}); // install empty handlers
 
   const gen = handleCode(interpreter);
   gen.next(); // move to the first yield
