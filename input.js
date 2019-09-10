@@ -10,16 +10,16 @@ function* handleCode(interpreter) {
       if (c === 91/* [ */) {
         c = yield;
         switch (c) {
-          case 65/* Up */:    interpreter.handlers.upArrow();              break;
-          case 67/* Right */: interpreter.handlers.rightArrow();           break;
-          case 66/* Down */:  interpreter.handlers.downArrow();            break;
-          case 68/* Left */:  interpreter.handlers.leftArrow();            break;
-          default:            interpreter.handlers.unhandled([27, 91, c]); break;
+          case 65/* Up */:    interpreter.upArrow();              break;
+          case 67/* Right */: interpreter.rightArrow();           break;
+          case 66/* Down */:  interpreter.downArrow();            break;
+          case 68/* Left */:  interpreter.leftArrow();            break;
+          default:            interpreter.unhandled([27, 91, c]); break;
         }
       }
     }
     else {
-      interpreter.handlers.char(String.fromCharCode(c));
+      interpreter.char(String.fromCharCode(c));
     }
   }
 }
@@ -36,11 +36,11 @@ const baseHandlers = {
 
 export function listen() {
   const interpreter = {};
-  interpreter.handlers = baseHandlers;
-
   const set = (handlers) => {
-    interpreter.handlers = Object.setPrototypeOf(handlers, baseHandlers);
+    Object.assign(interpreter, baseHandlers);
+    Object.assign(interpreter, handlers);
   };
+  set({}); // use base handlers
 
   const gen = handleCode(interpreter);
   gen.next(); // move to the first yield
