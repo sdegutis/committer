@@ -1,6 +1,13 @@
 // TODO: The "modes" concept is not quite right yet.
 //       It needs to be smarter about redrawing the
 //       the whole thing, vs drawing just a portion.
+//
+//       Potential solution:
+//         Use an event handler system for drawing,
+//         where drawAll() just fires every event.
+//         And when you want to draw one thing, just
+//         manually fire that event yourself.
+
 
 import * as screen from './screen.js';
 import * as tty from './tty.js';
