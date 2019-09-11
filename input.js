@@ -1,58 +1,36 @@
 import * as std from 'std';
 import * as os from 'os';
 
-function* handleCode(interpreter) {
-  while (true) {
-    let c = yield;
-
-    if (c === 27/* Esc */) {
-      c = yield;
-      if (c === 91/* [ */) {
-        c = yield;
-        switch (c) {
-          case 65/* Up */:    interpreter.upArrow();              break;
-          case 67/* Right */: interpreter.rightArrow();           break;
-          case 66/* Down */:  interpreter.downArrow();            break;
-          case 68/* Left */:  interpreter.leftArrow();            break;
-          default:            interpreter.unhandled([27, 91, c]); break;
-        }
-      }
-    }
-    else {
-      interpreter.char(String.fromCharCode(c));
-    }
-  }
-}
-
-const noop = () => {};
-const baseHandlers = {
-  upArrow:    noop,
-  downArrow:  noop,
-  rightArrow: noop,
-  leftArrow:  noop,
-  unhandled:  noop,
-  char:       noop,
-}
+export const keys = {
+  esc:       '\x1b',
+  up:        '\x1b[A',
+  down:      '\x1b[B',
+  left:      '\x1b[D',
+  right:     '\x1b[C',
+  ctrlLeft:  '\x1b[1;5D',
+  ctrlRight: '\x1b[1;5C',
+  tab:       '\t',
+  shiftTab:  '\x1b[Z',
+  ctrlSpace: '\0',
+  enter:     '\r',
+  newline:   '\n',
+  delete:    '\x7f',
+  altDelete: '\x1b\x7f',
+};
 
 export function listen() {
-  const interpreter = {};
-  const set = (handlers) => {
-    Object.assign(interpreter, baseHandlers);
-    Object.assign(interpreter, handlers);
-  };
-  set({}); // use base handlers
-
-  const gen = handleCode(interpreter);
-  gen.next(); // move to the first yield
+  let handler = null;
 
   os.setReadHandler(std.in, () => {
-    const array = new Uint8Array(32);
+    const array = new Uint8Array(64);
     const bytesRead = os.read(std.in, array.buffer, 0, array.length);
-    for (let i = 0; i < bytesRead; i++) {
-      const c = array[i];
-      gen.next(c);
-    }
+    const key = Array
+      .from(array.slice(0, bytesRead))
+      .map(b=>String.fromCharCode(b))
+      .join('');
+
+    if (handler) handler(key);
   });
 
-  return set;
+  return newHandler => handler = newHandler;
 }

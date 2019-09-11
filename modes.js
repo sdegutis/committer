@@ -27,7 +27,7 @@ export function push(startMode) {
   top = startMode(window);
   modes.push(top);
 
-  setInputHandlers(top.keyHandlers);
+  setInputHandlers(top.keyHandler);
   // calling the fn itself can draw and handle pushed-to logic
 }
 
@@ -39,7 +39,7 @@ export function pop() {
   top = modes[modes.length - 1]; // ok to be undefined
 
   if (top) {
-    setInputHandlers(top.keyHandlers);
+    setInputHandlers(top.keyHandler);
     top.draw();
     if (top.poppedTo) top.poppedTo();
   }

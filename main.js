@@ -11,6 +11,7 @@
 
 import * as tty from './tty.js';
 import * as modes from './modes.js';
+import * as input from './input.js';
 
 tty.setup();
 
@@ -22,23 +23,16 @@ function mainMode(window) {
   draw();
   tty.moveTo(5, 3);
 
-  const keyHandlers = {
-    upArrow:    () => tty.moveUp(),
-    rightArrow: () => tty.moveRight(),
-    downArrow:  () => tty.moveDown(),
-    leftArrow:  () => tty.moveLeft(),
-    char(c) {
-      if (c === '\x06'/* ctrl-f */) {
-        modes.push(innerMode);
-      }
-      else {
+  const keyHandler = (c) => {
+    switch (c) {
+      case input.keys.up:       tty.moveUp();           break;
+      case input.keys.right:    tty.moveRight();        break;
+      case input.keys.down:     tty.moveDown();         break;
+      case input.keys.left:     tty.moveLeft();         break;
+      case '\x06'/* ctrl-f */:  modes.push(innerMode);  break;
+      default:
         tty.as([tty.style.fg.green], () => tty.puts(c));
-      }
-
-    },
-    unhandled(chars) {
-      tty.puts('unhandled: ' + chars.join(' '));
-    },
+    }
   };
 
   function draw() {
@@ -62,7 +56,7 @@ function mainMode(window) {
 
   return {
     draw,
-    keyHandlers,
+    keyHandler,
     poppedTo: () => tty.moveTo(5, 3),
   };
 }
@@ -83,22 +77,19 @@ function innerMode(window) {
     }
   }
 
-  const keyHandlers = {
-    unhandled: (chars) => { },
-    char: (c) => {
-      if (c === '\x06') {
-        modes.pop();
-      }
-      else {
-        tty.moveTo(21, 21);
-        tty.puts(c);
-      }
-    },
+  const keyHandler = (c) => {
+    if (c === '\x06') {
+      modes.pop();
+    }
+    else {
+      tty.moveTo(21, 21);
+      tty.puts(c);
+    }
   };
 
   const leave = () => {
     // tty.exit();
   };
 
-  return { draw, keyHandlers, leave };
+  return { draw, keyHandler, leave };
 }
