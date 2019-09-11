@@ -1,4 +1,4 @@
-import * as screen from './screen.js';
+import * as tty from './tty.js';
 import * as input from './input.js';
 import * as resizer from './resizer.js';
 
@@ -13,11 +13,11 @@ export function setup() {
     window.width = w;
     window.height = h;
 
-    screen.saveCursorPositionAndAttributes();
+    tty.saveCursorPositionAndAttributes();
     for (const mode of modes) {
       mode.draw();
     }
-    screen.restoreCursorPositionAndAttributes();
+    tty.restoreCursorPositionAndAttributes();
   });
 
   setInputHandlers = input.listen();

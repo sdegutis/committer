@@ -9,7 +9,6 @@
 //         manually fire that event yourself.
 
 
-import * as screen from './screen.js';
 import * as tty from './tty.js';
 import * as modes from './modes.js';
 
@@ -21,42 +20,42 @@ modes.push(mainMode);
 
 function mainMode(window) {
   draw();
-  screen.moveTo(5, 3);
+  tty.moveTo(5, 3);
 
   const keyHandlers = {
-    upArrow:    () => screen.moveUp(),
-    rightArrow: () => screen.moveRight(),
-    downArrow:  () => screen.moveDown(),
-    leftArrow:  () => screen.moveLeft(),
+    upArrow:    () => tty.moveUp(),
+    rightArrow: () => tty.moveRight(),
+    downArrow:  () => tty.moveDown(),
+    leftArrow:  () => tty.moveLeft(),
     char(c) {
       if (c === '\x06'/* ctrl-f */) {
         modes.push(innerMode);
       }
       else {
-        screen.as([screen.style.fg.green], () => screen.puts(c));
+        tty.as([tty.style.fg.green], () => tty.puts(c));
       }
 
     },
     unhandled(chars) {
-      screen.puts('unhandled: ' + chars.join(' '));
+      tty.puts('unhandled: ' + chars.join(' '));
     },
   };
 
   function draw() {
-    screen.clearScreen();
+    tty.clearScreen();
 
     for (let y = 1; y <= window.height; y++) {
       for (let x = 1; x <= window.width; x++) {
         if (x === 1 || y === 1 || x === window.width || y === window.height) {
-          screen.moveTo(y, x);
-          screen.as([screen.style.bg.blue], () => screen.puts(' '));
+          tty.moveTo(y, x);
+          tty.as([tty.style.bg.blue], () => tty.puts(' '));
         }
       }
     }
 
-    screen.as([screen.style.fg.red], () => {
-      screen.moveTo(3, 3); print('window.width =', window.width);
-      screen.moveTo(4, 3); print('window.height =', window.height);
+    tty.as([tty.style.fg.red], () => {
+      tty.moveTo(3, 3); print('window.width =', window.width);
+      tty.moveTo(4, 3); print('window.height =', window.height);
     });
   }
 
@@ -64,7 +63,7 @@ function mainMode(window) {
   return {
     draw,
     keyHandlers,
-    poppedTo: () => screen.moveTo(5, 3),
+    poppedTo: () => tty.moveTo(5, 3),
   };
 }
 
@@ -77,8 +76,8 @@ function innerMode(window) {
     for (let y = 20; y <= 40; y++) {
       for (let x = 20; x <= 40; x++) {
         if (x === 20 || y === 20 || x === 40 || y === 40) {
-          screen.moveTo(y, x);
-          screen.as([screen.style.bg.green], () => screen.puts(' '));
+          tty.moveTo(y, x);
+          tty.as([tty.style.bg.green], () => tty.puts(' '));
         }
       }
     }
@@ -91,8 +90,8 @@ function innerMode(window) {
         modes.pop();
       }
       else {
-        screen.moveTo(21, 21);
-        screen.puts(c);
+        tty.moveTo(21, 21);
+        tty.puts(c);
       }
     },
   };
