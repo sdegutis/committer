@@ -16,16 +16,22 @@ export function moveTo(line, col)                    { puts(`${Esc}[${line};${co
 export function moveWindowUpOneLine()                { puts(`${Esc}D`); }
 export function moveWindowDownOneLine()              { puts(`${Esc}M`); }
 export function moveToNextLine()                     { puts(`${Esc}E`); }
+
 export function saveCursorPositionAndAttributes()    { puts(`${Esc}7`); }
 export function restoreCursorPositionAndAttributes() { puts(`${Esc}8`); }
+
 export function clearLineFromCursorRight()           { puts(`${Esc}[0K`); }
 export function clearLineFromCursorLeft()            { puts(`${Esc}[1K`); }
 export function clearLine()                          { puts(`${Esc}[2K`); }
 export function clearScreenFromCursorDown()          { puts(`${Esc}[0J`); }
 export function clearScreenFromCursorUp()            { puts(`${Esc}[1J`); }
 export function clearScreen()                        { puts(`${Esc}[2J`); }
+
 export function useAltScreen()                       { puts(`${Esc}[?1049h`); }
 export function useMainScreen()                      { puts(`${Esc}[?1049l`); }
+
+export function hideCursor()                        { puts(`${Esc}[?25l`); }
+export function showCursor()                        { puts(`${Esc}[?25h`); }
 
 export const style = {
   reset: 0, bright: 1, dim: 2, underscore: 4, blink: 5, reverse: 7, hidden: 8,

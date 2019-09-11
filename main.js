@@ -29,13 +29,6 @@ function mainMode(window) {
     downArrow:  () => screen.moveDown(),
     leftArrow:  () => screen.moveLeft(),
     char(c) {
-      if (c === 'a') {
-        screen.puts("\x1b[?25l")
-      }
-      else if (c === 'b') {
-        screen.puts("\x1b[?25h")
-      }
-      else
       if (c === '\x06'/* ctrl-f */) {
         modes.push(innerMode);
       }
