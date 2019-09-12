@@ -30,8 +30,9 @@ function mainMode(window) {
       case input.keys.down:     tty.moveDown();         break;
       case input.keys.left:     tty.moveLeft();         break;
       case '\x06'/* ctrl-f */:  modes.push(innerMode);  break;
-      default:
-        tty.as([tty.style.fg.green], () => tty.puts(c));
+      case 'z': tty.color(tty.style.fg.red);            break;
+      case 'x': tty.color(tty.style.fg.yellow);         break;
+      default: tty.puts(c);
     }
   };
 
