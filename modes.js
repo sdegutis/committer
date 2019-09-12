@@ -1,6 +1,5 @@
 import * as tty from './tty.js';
 import * as input from './input.js';
-import * as resizer from './resizer.js';
 
 const modes = [];
 let top;
@@ -9,7 +8,7 @@ let setInputHandlers;
 const window = {};
 
 export function setup() {
-  resizer.listen((w, h) => {
+  tty.onResize((w, h) => {
     window.width = w;
     window.height = h;
 

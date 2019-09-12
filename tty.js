@@ -17,6 +17,19 @@ export function setup() {
   os.signal(os.SIGINT, exit);
 }
 
+export function onResize(fn) {
+  // Call immediately
+  const [width, height] = os.ttyGetWinSize(std.out);
+  fn(width, height);
+
+  // Install resize handler
+  const SIGWINCH = 28;
+  os.signal(SIGWINCH, () => {
+    const [width, height] = os.ttyGetWinSize(std.out);
+    fn(width, height);
+  });
+}
+
 export function exit(code = 0) {
   useMainScreen();
   std.exit(code);
