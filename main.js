@@ -6,16 +6,19 @@ tty.setup();
 
 
 tty.onResize((w, h) => {
-  tty.clearScreen();
-  tty.moveToTopLeft();
-  tty.puts(w + '\n');
-  tty.puts(h + '\n');
+  tty.puts(tty.clearScreen + tty.moveToTopLeft + w + '\n' + h + '\n');
 });
 
 const listener = input.listen();
 
 listener.onKey = (c) => {
-  tty.puts(c);
+
+  switch (c) {
+    case 'z': tty.puts(tty.moveDown); break;
+    case 'x': tty.puts(tty.moveRight); break;
+    default: tty.puts(c);
+  }
+
 };
 
 

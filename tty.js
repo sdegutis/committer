@@ -1,6 +1,42 @@
 import * as std from 'std';
 import * as os from 'os';
 
+export const Esc = '\x1b';
+
+export const moveUp                    = (lines = 1) => `${Esc}[${lines}A`; moveUp.toString    = () => `${Esc}[A`;
+export const moveDown                  = (lines = 1) => `${Esc}[${lines}B`; moveDown.toString  = () => `${Esc}[B`;
+export const moveRight                 = (lines = 1) => `${Esc}[${lines}C`; moveRight.toString = () => `${Esc}[C`;
+export const moveLeft                  = (lines = 1) => `${Esc}[${lines}D`; moveLeft.toString  = () => `${Esc}[D`;
+export const moveTo                    = (line, col) => `${Esc}[${line};${col}H`;
+export const moveToTopLeft             = `${Esc}[H`;
+export const moveWindowUpOneLine       = `${Esc}D`;
+export const moveWindowDownOneLine     = `${Esc}M`;
+export const moveToNextLine            = `${Esc}E`;
+
+export const saveCursor                = `${Esc}7`;
+export const restoreCursor             = `${Esc}8`;
+
+export const clearLineFromCursorRight  = `${Esc}[0K`;
+export const clearLineFromCursorLeft   = `${Esc}[1K`;
+export const clearLine                 = `${Esc}[2K`;
+export const clearScreenFromCursorDown = `${Esc}[0J`;
+export const clearScreenFromCursorUp   = `${Esc}[1J`;
+export const clearScreen               = `${Esc}[2J`;
+
+export const useAltScreen              = `${Esc}[?1049h`;
+export const useMainScreen             = `${Esc}[?1049l`;
+
+export const hideCursor                = `${Esc}[?25l`;
+export const showCursor                = `${Esc}[?25h`;
+
+export const style = {
+  reset: 0, bright: 1, dim: 2, underscore: 4, blink: 5, reverse: 7, hidden: 8,
+  fg: { black: 30, red: 31, green: 32, yellow: 33, blue: 34, magenta: 35, cyan: 36, white: 37, },
+  bg: { black: 40, red: 41, green: 42, yellow: 43, blue: 44, magenta: 45, cyan: 46, white: 47, },
+};
+
+export const color = (...styles) => `${Esc}[${styles.join(';')}m`;
+
 export function setup() {
   // Quit if not usable
   if (!os.isatty(std.out)) {
@@ -11,7 +47,7 @@ export function setup() {
   os.ttySetRaw(std.out);
 
   // Use the alt screen
-  useAltScreen();
+  puts(useAltScreen);
 
   // Restore main screen on exit
   os.signal(os.SIGINT, exit);
@@ -31,50 +67,14 @@ export function onResize(fn) {
 }
 
 export function exit(code = 0) {
-  useMainScreen();
+  puts(useMainScreen);
   std.exit(code);
 }
-
-export const Esc = '\x1b';
 
 export function puts(str) {
   std.out.puts(str);
   std.out.flush();
 }
-
-export function moveUp(lines = 1)                    { puts(`${Esc}[${lines}A`); }
-export function moveDown(lines = 1)                  { puts(`${Esc}[${lines}B`); }
-export function moveRight(lines = 1)                 { puts(`${Esc}[${lines}C`); }
-export function moveLeft(lines = 1)                  { puts(`${Esc}[${lines}D`); }
-export function moveToTopLeft()                      { puts(`${Esc}[H`); }
-export function moveTo(line, col)                    { puts(`${Esc}[${line};${col}H`); }
-export function moveWindowUpOneLine()                { puts(`${Esc}D`); }
-export function moveWindowDownOneLine()              { puts(`${Esc}M`); }
-export function moveToNextLine()                     { puts(`${Esc}E`); }
-
-export function saveCursorPositionAndAttributes()    { puts(`${Esc}7`); }
-export function restoreCursorPositionAndAttributes() { puts(`${Esc}8`); }
-
-export function clearLineFromCursorRight()           { puts(`${Esc}[0K`); }
-export function clearLineFromCursorLeft()            { puts(`${Esc}[1K`); }
-export function clearLine()                          { puts(`${Esc}[2K`); }
-export function clearScreenFromCursorDown()          { puts(`${Esc}[0J`); }
-export function clearScreenFromCursorUp()            { puts(`${Esc}[1J`); }
-export function clearScreen()                        { puts(`${Esc}[2J`); }
-
-export function useAltScreen()                       { puts(`${Esc}[?1049h`); }
-export function useMainScreen()                      { puts(`${Esc}[?1049l`); }
-
-export function hideCursor()                        { puts(`${Esc}[?25l`); }
-export function showCursor()                        { puts(`${Esc}[?25h`); }
-
-export const style = {
-  reset: 0, bright: 1, dim: 2, underscore: 4, blink: 5, reverse: 7, hidden: 8,
-  fg: { black: 30, red: 31, green: 32, yellow: 33, blue: 34, magenta: 35, cyan: 36, white: 37, },
-  bg: { black: 40, red: 41, green: 42, yellow: 43, blue: 44, magenta: 45, cyan: 46, white: 47, },
-};
-
-export function color(...styles) { puts(`${Esc}[${styles.join(';')}m`); }
 
 export function as(styles, fn) {
   color(...styles);
