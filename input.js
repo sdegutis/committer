@@ -15,7 +15,6 @@ export const keys = {
   enter:     '\r',
   newline:   '\n',
   delete:    '\x7f',
-  altDelete: '\x1b\x7f',
 };
 
 export function listen() {
