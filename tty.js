@@ -3,11 +3,17 @@ import * as os from 'os';
 
 export const Esc = '\x1b';
 
-export const moveUp                    = (lines = 1) => `${Esc}[${lines}A`; moveUp.toString    = () => `${Esc}[A`;
-export const moveDown                  = (lines = 1) => `${Esc}[${lines}B`; moveDown.toString  = () => `${Esc}[B`;
-export const moveRight                 = (lines = 1) => `${Esc}[${lines}C`; moveRight.toString = () => `${Esc}[C`;
-export const moveLeft                  = (lines = 1) => `${Esc}[${lines}D`; moveLeft.toString  = () => `${Esc}[D`;
+export const moveUp                    = `${Esc}[A`;
+export const moveDown                  = `${Esc}[B`;
+export const moveRight                 = `${Esc}[C`;
+export const moveLeft                  = `${Esc}[D`;
+
+export const moveUpBy                  = (lines = 1) => `${Esc}[${lines}A`;
+export const moveDownBy                = (lines = 1) => `${Esc}[${lines}B`;
+export const moveRightBy               = (lines = 1) => `${Esc}[${lines}C`;
+export const moveLeftBy                = (lines = 1) => `${Esc}[${lines}D`;
 export const moveTo                    = (line, col) => `${Esc}[${line};${col}H`;
+
 export const moveToTopLeft             = `${Esc}[H`;
 export const moveWindowUpOneLine       = `${Esc}D`;
 export const moveWindowDownOneLine     = `${Esc}M`;
