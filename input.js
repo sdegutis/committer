@@ -18,7 +18,7 @@ export const keys = {
 };
 
 export function listen() {
-  let handler = null;
+  let listener = {};
 
   os.setReadHandler(std.in, () => {
     const array = new Uint8Array(64);
@@ -28,8 +28,10 @@ export function listen() {
       .map(b=>String.fromCharCode(b))
       .join('');
 
-    if (handler) handler(key);
+    if (listener.onKey) {
+      listener.onKey(key);
+    }
   });
 
-  return newHandler => handler = newHandler;
+  return listener;
 }
