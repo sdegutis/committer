@@ -3,48 +3,43 @@ import * as os from 'os';
 
 export const Esc = '\x1b';
 
-export const moveUp                    = `${Esc}[A`;
-export const moveDown                  = `${Esc}[B`;
-export const moveRight                 = `${Esc}[C`;
-export const moveLeft                  = `${Esc}[D`;
+export const moveUp                    = (lines = 1) => std.out.puts(`${Esc}[${lines}A`);
+export const moveDown                  = (lines = 1) => std.out.puts(`${Esc}[${lines}B`);
+export const moveRight                 = (lines = 1) => std.out.puts(`${Esc}[${lines}C`);
+export const moveLeft                  = (lines = 1) => std.out.puts(`${Esc}[${lines}D`);
+export const moveTo                    = (line, col) => std.out.puts(`${Esc}[${line};${col}H`);
 
-export const moveUpBy                  = (lines = 1) => `${Esc}[${lines}A`;
-export const moveDownBy                = (lines = 1) => `${Esc}[${lines}B`;
-export const moveRightBy               = (lines = 1) => `${Esc}[${lines}C`;
-export const moveLeftBy                = (lines = 1) => `${Esc}[${lines}D`;
-export const moveTo                    = (line, col) => `${Esc}[${line};${col}H`;
+export const moveToTopLeft             = () => std.out.puts(`${Esc}[H`);
+export const moveWindowUpOneLine       = () => std.out.puts(`${Esc}D`);
+export const moveWindowDownOneLine     = () => std.out.puts(`${Esc}M`);
+export const moveToNextLine            = () => std.out.puts(`${Esc}E`);
 
-export const moveToTopLeft             = `${Esc}[H`;
-export const moveWindowUpOneLine       = `${Esc}D`;
-export const moveWindowDownOneLine     = `${Esc}M`;
-export const moveToNextLine            = `${Esc}E`;
+export const saveCursor                = () => std.out.puts(`${Esc}7`);
+export const restoreCursor             = () => std.out.puts(`${Esc}8`);
 
-export const saveCursor                = `${Esc}7`;
-export const restoreCursor             = `${Esc}8`;
+export const clearLineFromCursorRight  = () => std.out.puts(`${Esc}[0K`);
+export const clearLineFromCursorLeft   = () => std.out.puts(`${Esc}[1K`);
+export const clearLine                 = () => std.out.puts(`${Esc}[2K`);
+export const clearScreenFromCursorDown = () => std.out.puts(`${Esc}[0J`);
+export const clearScreenFromCursorUp   = () => std.out.puts(`${Esc}[1J`);
+export const clearScreen               = () => std.out.puts(`${Esc}[2J`);
 
-export const clearLineFromCursorRight  = `${Esc}[0K`;
-export const clearLineFromCursorLeft   = `${Esc}[1K`;
-export const clearLine                 = `${Esc}[2K`;
-export const clearScreenFromCursorDown = `${Esc}[0J`;
-export const clearScreenFromCursorUp   = `${Esc}[1J`;
-export const clearScreen               = `${Esc}[2J`;
+export const useAltScreen              = () => std.out.puts(`${Esc}[?1049h`);
+export const useMainScreen             = () => std.out.puts(`${Esc}[?1049l`);
 
-export const useAltScreen              = `${Esc}[?1049h`;
-export const useMainScreen             = `${Esc}[?1049l`;
+export const hideCursor                = () => std.out.puts(`${Esc}[?25l`);
+export const showCursor                = () => std.out.puts(`${Esc}[?25h`);
 
-export const hideCursor                = `${Esc}[?25l`;
-export const showCursor                = `${Esc}[?25h`;
+export const enableTracking            = () => std.out.puts(`${Esc}[?1000;1003;1006;1015h`);
+export const disableTracking           = () => std.out.puts(`${Esc}[?1000;1003;1006;1015l`);
 
-export const enableTracking            = `${Esc}[?1000;1003;1006;1015h`;
-export const disableTracking           = `${Esc}[?1000;1003;1006;1015l`;
-
-export const style = {
+export const styles = {
   reset: 0, bright: 1, dim: 2, underscore: 4, blink: 5, reverse: 7, hidden: 8,
   fg: { black: 30, red: 31, green: 32, yellow: 33, blue: 34, magenta: 35, cyan: 36, white: 37, },
   bg: { black: 40, red: 41, green: 42, yellow: 43, blue: 44, magenta: 45, cyan: 46, white: 47, },
 };
 
-export const color = (...styles) => `${Esc}[${styles.join(';')}m`;
+export const setStyles = (...styles) => `${Esc}[${styles.join(';')}m`;
 
 export function setup() {
   // Quit if not usable
@@ -52,15 +47,14 @@ export function setup() {
     throw new Error("Not on a usable terminal!");
   }
 
-  // Needed so that user pressing a key doesn't require newline to flush to app
+  // React immediately to keys
   os.ttySetRaw(std.out);
 
-  // Use the alt screen
-  // puts(useAltScreen);
+  // useAltScreen();
+  enableTracking();
+  std.out.flush();
 
-  puts(enableTracking);
-
-  // Restore main screen on exit
+  // Cleanup state on exit
   os.signal(os.SIGINT, exit);
 }
 
@@ -78,18 +72,8 @@ export function onResize(fn) {
 }
 
 export function exit(code = 0) {
-  // puts(useMainScreen);
-  puts(disableTracking);
-  std.exit(code);
-}
-
-export function puts(str) {
-  std.out.puts(str);
+  // useMainScreen();
+  disableTracking();
   std.out.flush();
-}
-
-export function as(styles, fn) {
-  color(...styles);
-  fn();
-  color(style.reset);
+  std.exit(code);
 }
