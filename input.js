@@ -10,6 +10,16 @@ function bytesToString(bs) {
 }
 
 function* stateMachine(listener) {
+  let alt = false;
+
+  function maybeWithAlt(e) {
+    if (alt) {
+      e.alt = true;
+      alt = false;
+    }
+    return e;
+  }
+
   while (true) {
     let b = yield;
     if (b === 0x1b) { // <ESC>
@@ -85,15 +95,19 @@ function* stateMachine(listener) {
         }
         // print(bytesToString(paramBytes) + ' = ' + b + ' = ' + b.toString(16))
       }
+      else {
+        alt = true;
+        yield -1;
+      }
     }
     else if (b >= 0x00 && b <= 0x1f) {
-      listener.onKey({ type: 'control', byte: b });
+      listener.onKey(maybeWithAlt({ type: 'control', byte: b }));
     }
     else if (b >= 0x20 && b <= 0x7e) {
-      listener.onKey({ type: 'print', char: String.fromCharCode(b) });
+      listener.onKey(maybeWithAlt({ type: 'print', char: String.fromCharCode(b) }));
     }
     else if (b === 0x7f) { // delete
-      listener.onKey({ type: "delete" });
+      listener.onKey(maybeWithAlt({ type: "delete" }));
     }
     else {
       listener.onKey({ type: 'other', byte: b });
@@ -125,7 +139,13 @@ export function listen() {
 
     for (let i = 0; i < bytesRead; i++) {
       const b = array[i];
-      machine.next(b);
+      const backupBy = machine.next(b).value;
+      if (backupBy) {
+        i += backupBy;
+        // can't really exit, may need tty cleanup etc
+        if (i < 0) print("Error! Escape code state machine backed up too far!");
+        machine.next(); // push it forward
+      }
     }
 
     // print(array.slice(0, bytesRead).toLocaleString() + ' ' + JSON.stringify(key));
