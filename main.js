@@ -57,7 +57,10 @@ tty.onResize((w, h) => {
 
 input.listen().onKey = (event, args) => {
 
-  print(event, JSON.stringify(args));
+  const bits = args.bits;
+  delete args.bits;
+
+  print(event, JSON.stringify(args), JSON.stringify(bits).replace(/0/g, '_'));
 
   // switch (c) {
   //   case 'z': tty.puts(tty.moveWindowDownOneLine); break;

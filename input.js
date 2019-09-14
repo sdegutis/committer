@@ -21,7 +21,15 @@ function* stateMachine(listener) {
         }
         switch (b) {
           case 0x4d: // M = mouse event
-            listener.onKey("mouse", { paramBytes: bytesToString(paramBytes) });
+            const [a,x,y] = bytesToString(paramBytes).split(';').map(n => parseInt(n, 10));
+
+            const bits = [];
+            for (let i = 0; i < 32; i++) {
+              const bit = (a >> i) & 1;
+              bits.push(bit);
+            }
+
+            listener.onKey("mouse", { a,x,y, bits });
             break;
           case 0x41: // A = up
             listener.onKey('up', {});
