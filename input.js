@@ -74,19 +74,19 @@ function* stateMachine(listener) {
             break;
           }
           case 0x41: // A = up
-            listener.onKey({ type: 'up' });
+            listener.onKey({ type: 'move', where: 'up' });
             break;
           case 0x42: // B = down
-            listener.onKey({ type: 'down' });
+            listener.onKey({ type: 'move', where: 'down' });
             break;
           case 0x43: { // C = right
-            const event = { type: 'right' };
+            const event = { type: 'move', where: 'right' };
             if (paramBytes.length > 0) event.ctrl = true;
             listener.onKey(event);
             break;
           }
           case 0x44: { // D = left
-            const event = { type: 'left' };
+            const event = { type: 'move', where: 'left' };
             if (paramBytes.length > 0) event.ctrl = true;
             listener.onKey(event);
             break;
