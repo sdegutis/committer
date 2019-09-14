@@ -1,7 +1,7 @@
 import * as std from 'std';
 import * as os from 'os';
 
-const undoers = {
+const undo = {
   screen: false,
   cursor: false,
   mouse: false,
@@ -30,20 +30,20 @@ export const clearScreenDown  = () => std.out.puts(`\x1b[0J`);
 export const clearScreenUp    = () => std.out.puts(`\x1b[1J`);
 export const clearScreen      = () => std.out.puts(`\x1b[2J`);
 
-export const useAltScreen     = () => { std.out.puts(`\x1b[?1049h`); undoers.screen = true; };
-export const useMainScreen    = () => { std.out.puts(`\x1b[?1049l`); undoers.screen = false; };
+export const useAltScreen     = () => { std.out.puts(`\x1b[?1049h`); undo.screen = true; };
+export const useMainScreen    = () => { std.out.puts(`\x1b[?1049l`); undo.screen = false; };
 
-export const hideCursor       = () => { std.out.puts(`\x1b[?25l`); undoers.cursor = true; };
-export const showCursor       = () => { std.out.puts(`\x1b[?25h`); undoers.cursor = false; };
+export const hideCursor       = () => { std.out.puts(`\x1b[?25l`); undo.cursor = true; };
+export const showCursor       = () => { std.out.puts(`\x1b[?25h`); undo.cursor = false; };
 
-export const enableMouse      = () => { std.out.puts(`\x1b[?1000;1003;1006;1015h`); undoers.mouse = true; };
-export const disableMouse     = () => { std.out.puts(`\x1b[?1000;1003;1006;1015l`); undoers.mouse = false; };
+export const enableMouse      = () => { std.out.puts(`\x1b[?1000;1003;1006;1015h`); undo.mouse = true; };
+export const disableMouse     = () => { std.out.puts(`\x1b[?1000;1003;1006;1015l`); undo.mouse = false; };
 
-export const enablePaste      = () => { std.out.puts(`\x1b[?2004h`); undoers.paste = true; };
-export const disablePaste     = () => { std.out.puts(`\x1b[?2004l`); undoers.paste = false; };
+export const enablePaste      = () => { std.out.puts(`\x1b[?2004h`); undo.paste = true; };
+export const disablePaste     = () => { std.out.puts(`\x1b[?2004l`); undo.paste = false; };
 
-export const enableFocus      = () => { std.out.puts(`\x1b[?1004h`); undoers.focus = true; };
-export const disableFocus     = () => { std.out.puts(`\x1b[?1004l`); undoers.focus = false; };
+export const enableFocus      = () => { std.out.puts(`\x1b[?1004h`); undo.focus = true; };
+export const disableFocus     = () => { std.out.puts(`\x1b[?1004l`); undo.focus = false; };
 
 export const styles = {
   reset: 0, bright: 1, dim: 2, underscore: 4, blink: 5, reverse: 7, hidden: 8,
@@ -53,7 +53,7 @@ export const styles = {
 
 export const setStyles = (...items) => {
   if (items.length === 0) return;
-  undoers.style = (items[items.length - 1] !== styles.reset);
+  undo.style = (items[items.length - 1] !== styles.reset);
   std.out.puts(`\x1b[${items.join(';')}m`);
 };
 
@@ -84,12 +84,12 @@ export function onResize(fn) {
 }
 
 export function exit(code = 0) {
-  if (undoers.screen) useMainScreen();
-  if (undoers.cursor) showCursor();
-  if (undoers.mouse) disableMouse();
-  if (undoers.style) setStyles(styles.reset);
-  if (undoers.paste) disablePaste();
-  if (undoers.focus) disableFocus();
+  if (undo.screen) useMainScreen();
+  if (undo.cursor) showCursor();
+  if (undo.mouse) disableMouse();
+  if (undo.style) setStyles(styles.reset);
+  if (undo.paste) disablePaste();
+  if (undo.focus) disableFocus();
   std.out.flush();
   std.exit(code);
 }
