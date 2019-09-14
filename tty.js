@@ -9,7 +9,6 @@ export const moveRight                 = (lines = 1) => std.out.puts(`${Esc}[${l
 export const moveLeft                  = (lines = 1) => std.out.puts(`${Esc}[${lines}D`);
 export const moveTo                    = (line, col) => std.out.puts(`${Esc}[${line};${col}H`);
 
-export const moveToTopLeft             = () => std.out.puts(`${Esc}[H`);
 export const moveWindowUpOneLine       = () => std.out.puts(`${Esc}D`);
 export const moveWindowDownOneLine     = () => std.out.puts(`${Esc}M`);
 export const moveToNextLine            = () => std.out.puts(`${Esc}E`);
