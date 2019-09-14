@@ -1,6 +1,13 @@
 import * as std from 'std';
 import * as os from 'os';
 
+const undoers = {
+  screen: false,
+  cursor: false,
+  mouse: false,
+  style: false,
+};
+
 export const Esc = '\x1b';
 
 export const moveUp                    = (lines = 1) => std.out.puts(`${Esc}[${lines}A`);
@@ -23,14 +30,14 @@ export const clearScreenFromCursorDown = () => std.out.puts(`${Esc}[0J`);
 export const clearScreenFromCursorUp   = () => std.out.puts(`${Esc}[1J`);
 export const clearScreen               = () => std.out.puts(`${Esc}[2J`);
 
-export const useAltScreen              = () => std.out.puts(`${Esc}[?1049h`);
-export const useMainScreen             = () => std.out.puts(`${Esc}[?1049l`);
+export const useAltScreen              = () => { std.out.puts(`${Esc}[?1049h`); undoers.screen = true; };
+export const useMainScreen             = () => { std.out.puts(`${Esc}[?1049l`); undoers.screen = false; };
 
-export const hideCursor                = () => std.out.puts(`${Esc}[?25l`);
-export const showCursor                = () => std.out.puts(`${Esc}[?25h`);
+export const hideCursor                = () => { std.out.puts(`${Esc}[?25l`); undoers.cursor = true; };
+export const showCursor                = () => { std.out.puts(`${Esc}[?25h`); undoers.cursor = false; };
 
-export const enableTracking            = () => std.out.puts(`${Esc}[?1000;1003;1006;1015h`);
-export const disableTracking           = () => std.out.puts(`${Esc}[?1000;1003;1006;1015l`);
+export const enableMouse               = () => { std.out.puts(`${Esc}[?1000;1003;1006;1015h`); undoers.mouse = true; };
+export const disableMouse              = () => { std.out.puts(`${Esc}[?1000;1003;1006;1015l`); undoers.mouse = false; };
 
 export const styles = {
   reset: 0, bright: 1, dim: 2, underscore: 4, blink: 5, reverse: 7, hidden: 8,
@@ -38,8 +45,10 @@ export const styles = {
   bg: { black: 40, red: 41, green: 42, yellow: 43, blue: 44, magenta: 45, cyan: 46, white: 47, },
 };
 
-export const setStyles = (...styles) => {
-  std.out.puts(`${Esc}[${styles.join(';')}m`);
+export const setStyles = (...items) => {
+  if (items.length === 0) return;
+  undoers.style = (items[items.length - 1] !== styles.reset);
+  std.out.puts(`${Esc}[${items.join(';')}m`);
 };
 
 export function setup() {
@@ -51,8 +60,8 @@ export function setup() {
   // React immediately to keys
   os.ttySetRaw(std.out);
 
-  // useAltScreen();
-  enableTracking();
+  useAltScreen();
+  enableMouse();
   std.out.flush();
 
   // Cleanup state on exit
@@ -73,9 +82,10 @@ export function onResize(fn) {
 }
 
 export function exit(code = 0) {
-  setStyles(styles.reset);
-  useMainScreen();
-  disableTracking();
+  if (undoers.screen) useMainScreen();
+  if (undoers.cursor) showCursor();
+  if (undoers.mouse) disableMouse();
+  if (undoers.style) setStyles(styles.reset);
   std.out.flush();
   std.exit(code);
 }
