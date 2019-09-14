@@ -47,6 +47,12 @@ import * as std from 'std';
 import * as input from './input.js';
 
 tty.setup();
+
+std.out.puts("\x1b[38;2;255;100;0mTRUECOLOR\x1b[0m\n");
+std.out.flush();
+
+tty.exit();
+
 tty.useAltScreen();
 tty.enableMouse();
 std.out.flush();
