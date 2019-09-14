@@ -48,11 +48,6 @@ import * as input from './input.js';
 
 tty.setup();
 
-std.out.puts("\x1b[38;2;255;100;0mTRUECOLOR\x1b[0m\n");
-std.out.flush();
-
-tty.exit();
-
 tty.useAltScreen();
 tty.enableMouse();
 std.out.flush();
@@ -77,11 +72,28 @@ input.listen().onKey = (event) => {
     }
   }
   else if (event.type === 'control') {
+    if (event.byte === 0x0e) { // ctrl-n (down)
+      tty.scrollDown();
+      std.out.flush();
+    }
+    else if (event.byte === 0x10) { // ctrl-p (up)
+      tty.scrollUp();
+      std.out.flush();
+    }
   }
   else if (event.type === 'print') {
     if (event.char === 'c') {
       tty.clearScreen();
       tty.moveTo(1,1);
+      std.out.flush();
+    }
+    else if (event.char === 'r') {
+      for (let row = 2; row < window.height-1; row++) {
+        for (let col = 2; col < window.width-1; col++) {
+          tty.moveTo(row,col);
+          std.out.puts('a');
+        }
+      }
       std.out.flush();
     }
     else if (event.char === 'b') {
