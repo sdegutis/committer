@@ -10,34 +10,34 @@ const undoers = {
 
 export const Esc = '\x1b';
 
-export const moveUp                    = (lines = 1) => std.out.puts(`${Esc}[${lines}A`);
-export const moveDown                  = (lines = 1) => std.out.puts(`${Esc}[${lines}B`);
-export const moveRight                 = (lines = 1) => std.out.puts(`${Esc}[${lines}C`);
-export const moveLeft                  = (lines = 1) => std.out.puts(`${Esc}[${lines}D`);
-export const moveTo                    = (line, col) => std.out.puts(`${Esc}[${line};${col}H`);
+export const moveUp           = (lines = 1) => std.out.puts(`${Esc}[${lines}A`);
+export const moveDown         = (lines = 1) => std.out.puts(`${Esc}[${lines}B`);
+export const moveRight        = (lines = 1) => std.out.puts(`${Esc}[${lines}C`);
+export const moveLeft         = (lines = 1) => std.out.puts(`${Esc}[${lines}D`);
+export const moveTo           = (line, col) => std.out.puts(`${Esc}[${line};${col}H`);
 
-export const moveWindowUpOneLine       = () => std.out.puts(`${Esc}D`);
-export const moveWindowDownOneLine     = () => std.out.puts(`${Esc}M`);
-export const moveToNextLine            = () => std.out.puts(`${Esc}E`);
+export const scrollUp         = (lines = 1) => std.out.puts(`${Esc}${lines}D`);
+export const scrollDown       = (lines = 1) => std.out.puts(`${Esc}${lines}M`);
+export const moveToNextLine   = () => std.out.puts(`${Esc}E`);
 
-export const saveCursor                = () => std.out.puts(`${Esc}7`);
-export const restoreCursor             = () => std.out.puts(`${Esc}8`);
+export const saveCursor       = () => std.out.puts(`${Esc}7`);
+export const restoreCursor    = () => std.out.puts(`${Esc}8`);
 
-export const clearLineFromCursorRight  = () => std.out.puts(`${Esc}[0K`);
-export const clearLineFromCursorLeft   = () => std.out.puts(`${Esc}[1K`);
-export const clearLine                 = () => std.out.puts(`${Esc}[2K`);
-export const clearScreenFromCursorDown = () => std.out.puts(`${Esc}[0J`);
-export const clearScreenFromCursorUp   = () => std.out.puts(`${Esc}[1J`);
-export const clearScreen               = () => std.out.puts(`${Esc}[2J`);
+export const clearLineRight   = () => std.out.puts(`${Esc}[0K`);
+export const clearLineLeft    = () => std.out.puts(`${Esc}[1K`);
+export const clearLine        = () => std.out.puts(`${Esc}[2K`);
+export const clearScreenDown  = () => std.out.puts(`${Esc}[0J`);
+export const clearScreenUp    = () => std.out.puts(`${Esc}[1J`);
+export const clearScreen      = () => std.out.puts(`${Esc}[2J`);
 
-export const useAltScreen              = () => { std.out.puts(`${Esc}[?1049h`); undoers.screen = true; };
-export const useMainScreen             = () => { std.out.puts(`${Esc}[?1049l`); undoers.screen = false; };
+export const useAltScreen     = () => { std.out.puts(`${Esc}[?1049h`); undoers.screen = true; };
+export const useMainScreen    = () => { std.out.puts(`${Esc}[?1049l`); undoers.screen = false; };
 
-export const hideCursor                = () => { std.out.puts(`${Esc}[?25l`); undoers.cursor = true; };
-export const showCursor                = () => { std.out.puts(`${Esc}[?25h`); undoers.cursor = false; };
+export const hideCursor       = () => { std.out.puts(`${Esc}[?25l`); undoers.cursor = true; };
+export const showCursor       = () => { std.out.puts(`${Esc}[?25h`); undoers.cursor = false; };
 
-export const enableMouse               = () => { std.out.puts(`${Esc}[?1000;1003;1006;1015h`); undoers.mouse = true; };
-export const disableMouse              = () => { std.out.puts(`${Esc}[?1000;1003;1006;1015l`); undoers.mouse = false; };
+export const enableMouse      = () => { std.out.puts(`${Esc}[?1000;1003;1006;1015h`); undoers.mouse = true; };
+export const disableMouse     = () => { std.out.puts(`${Esc}[?1000;1003;1006;1015l`); undoers.mouse = false; };
 
 export const styles = {
   reset: 0, bright: 1, dim: 2, underscore: 4, blink: 5, reverse: 7, hidden: 8,
