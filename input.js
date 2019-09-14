@@ -79,6 +79,12 @@ function* stateMachine(listener) {
         // print(bytesToString(paramBytes) + ' = ' + b + ' = ' + b.toString(16))
       }
     }
+    else if (b >= 0x00 && b <= 0x1f) {
+      listener.onKey({ type: 'control', byte: b });
+    }
+    else if (b >= 0x20 && b <= 0x7e) {
+      listener.onKey({ type: 'print', char: String.fromCharCode(b) });
+    }
     else if (b === 0x7f) { // delete
       listener.onKey({ type: "delete" });
     }
