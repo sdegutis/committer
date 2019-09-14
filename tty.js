@@ -71,7 +71,8 @@ export function onResize(fn) {
 }
 
 export function exit(code = 0) {
-  // useMainScreen();
+  setStyles(styles.reset);
+  useMainScreen();
   disableTracking();
   std.out.flush();
   std.exit(code);
