@@ -27,9 +27,9 @@ function* stateMachine(listener) {
             const modFlag = (flags >> 2) & 0b111;
             const buttonFlag = flags & 0b11;
 
-            const args = {x,y};
+            const event = { type: "mouse", x, y };
 
-            args.mods = {
+            event.mods = {
               ctrl:  !!(modFlag & 0b100),
               alt:   !!(modFlag & 0b010),
               shift: !!(modFlag & 0b001),
@@ -37,49 +37,49 @@ function* stateMachine(listener) {
 
             switch (typeFlag) {
               case 3: // scroll
-                args.type = 'scroll';
-                args.by = (flags & 1) ? -1 : 1;
+                event.subtype = 'scroll';
+                event.by = (flags & 1) ? -1 : 1;
                 break;
               case 2: // move
-                args.type = 'move';
+                event.subtype = 'move';
                 break;
               case 1: // up/down
                 if (buttonFlag === 3) {
-                  args.type = 'release';
+                  event.subtype = 'release';
                   // Multiple buttons can be pressed simultaneously,
                   // but they can be released in any order, and the
                   // terminal doesn't tell us anything about which.
                   // But either way, that's buggy in Apple Terminal.
                 }
                 else {
-                  args.type = 'press';
-                  args.button = buttonFlag;
+                  event.subtype = 'press';
+                  event.button = buttonFlag;
                 }
                 break;
             }
 
-            listener.onKey("mouse", args);
+            listener.onKey(event);
             break;
           case 0x41: // A = up
-            listener.onKey('up', {});
+            listener.onKey({ type: 'up' });
             break;
           case 0x42: // B = down
-            listener.onKey('down', {});
+            listener.onKey({ type: 'down' });
             break;
           case 0x43: // C = right
-            listener.onKey('right-arrow', { ctrl: paramBytes.length > 0 });
+            listener.onKey({ type: 'right-arrow', ctrl: paramBytes.length > 0 });
             break;
           case 0x44: // D = left
-            listener.onKey('left-arrow', { ctrl: paramBytes.length > 0 });
+            listener.onKey({ type: 'left-arrow', ctrl: paramBytes.length > 0 });
             break;
           case 0x5a: // Z = shift-tab (???)
-            listener.onKey('shift-tab', {});
+            listener.onKey({ type: 'shift-tab' });
             break;
         }
         // print(bytesToString(paramBytes) + ' = ' + b + ' = ' + b.toString(16))
       }
       else if (b === 0x7f) { // delete
-        listener.onKey("delete", {});
+        listener.onKey({ type: "delete" });
       }
     }
     // print(b);
@@ -103,7 +103,7 @@ export function listen() {
 
     if (bytesRead === 1 && array[0] === 0x1b) {
       // special-case escape by itself
-      listener.onKey('escape', {});
+      listener.onKey({ type: 'escape' });
       return;
     }
 

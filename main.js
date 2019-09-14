@@ -55,8 +55,13 @@ tty.onResize((w, h) => {
   // tty.puts(tty.clearScreen + tty.moveToTopLeft + w + '\n' + h + '\n');
 });
 
-input.listen().onKey = (event, args) => {
-  print(event, JSON.stringify(args));
+input.listen().onKey = (event) => {
+  switch (event.type) {
+    // case 'mouse': break;
+    default:
+      print(JSON.stringify(event));
+  }
+
 
   // switch (c) {
   //   case 'z': tty.puts(tty.moveWindowDownOneLine); break;
