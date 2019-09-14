@@ -104,8 +104,16 @@ function* stateMachine(listener) {
             listener.onKey({ type: 'paste', str: pasted });
             break;
           }
+          case 0x4f: {
+            listener.onKey({ type: 'unfocus' });
+            break;
+          }
+          case 0x49: {
+            listener.onKey({ type: 'focus' });
+            break;
+          }
           default:
-            print('unhandled escape code', paramBytes, b);
+            print('unhandled escape code', paramBytes, b, b.toString(16));
         }
         // print(bytesToString(paramBytes) + ' = ' + b + ' = ' + b.toString(16))
       }
@@ -162,7 +170,7 @@ export function listen() {
       }
     }
 
-    // print(array.slice(0, bytesRead).toLocaleString() + ' ' + JSON.stringify(key));
+    print(array.slice(0, bytesRead).toLocaleString() + ' ' + JSON.stringify(key));
   });
 
   return listener;

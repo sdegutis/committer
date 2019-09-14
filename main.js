@@ -51,6 +51,7 @@ tty.setup();
 tty.useAltScreen();
 tty.enableMouse();
 tty.enablePaste();
+tty.enableFocus();
 std.out.flush();
 
 let window = {};

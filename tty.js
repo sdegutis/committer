@@ -7,6 +7,7 @@ const undoers = {
   mouse: false,
   style: false,
   paste: false,
+  focus: false,
 };
 
 export const Esc = '\x1b';
@@ -42,6 +43,9 @@ export const disableMouse     = () => { std.out.puts(`${Esc}[?1000;1003;1006;101
 
 export const enablePaste      = () => { std.out.puts(`${Esc}[?2004h`); undoers.paste = true; };
 export const disablePaste     = () => { std.out.puts(`${Esc}[?2004l`); undoers.paste = false; };
+
+export const enableFocus      = () => { std.out.puts(`${Esc}[?1004h`); undoers.focus = true; };
+export const disableFocus     = () => { std.out.puts(`${Esc}[?1004l`); undoers.focus = false; };
 
 export const styles = {
   reset: 0, bright: 1, dim: 2, underscore: 4, blink: 5, reverse: 7, hidden: 8,
@@ -87,6 +91,7 @@ export function exit(code = 0) {
   if (undoers.mouse) disableMouse();
   if (undoers.style) setStyles(styles.reset);
   if (undoers.paste) disablePaste();
+  if (undoers.focus) disableFocus();
   std.out.flush();
   std.exit(code);
 }
