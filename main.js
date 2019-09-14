@@ -52,7 +52,7 @@ let window = {};
 tty.onResize((w, h) => {
   window.width = w;
   window.height = h;
-  tty.puts(tty.clearScreen + tty.moveToTopLeft + w + '\n' + h + '\n');
+  // tty.puts(tty.clearScreen + tty.moveToTopLeft + w + '\n' + h + '\n');
 });
 
 input.listen().onKey = (c) => {
@@ -60,7 +60,7 @@ input.listen().onKey = (c) => {
   switch (c) {
     case 'z': tty.puts(tty.moveWindowDownOneLine); break;
     case 'x': tty.puts(tty.moveWindowUpOneLine); break;
-    default: tty.puts(c);
+    default: /* tty.puts(c); */ tty.puts(JSON.stringify(c) + '\n');
   }
 
 };

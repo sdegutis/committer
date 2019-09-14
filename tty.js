@@ -35,6 +35,9 @@ export const useMainScreen             = `${Esc}[?1049l`;
 export const hideCursor                = `${Esc}[?25l`;
 export const showCursor                = `${Esc}[?25h`;
 
+export const enableTracking            = `${Esc}[?1000;1003;1006;1015h`;
+export const disableTracking           = `${Esc}[?1000;1003;1006;1015l`;
+
 export const style = {
   reset: 0, bright: 1, dim: 2, underscore: 4, blink: 5, reverse: 7, hidden: 8,
   fg: { black: 30, red: 31, green: 32, yellow: 33, blue: 34, magenta: 35, cyan: 36, white: 37, },
@@ -53,7 +56,9 @@ export function setup() {
   os.ttySetRaw(std.out);
 
   // Use the alt screen
-  puts(useAltScreen);
+  // puts(useAltScreen);
+
+  puts(enableTracking);
 
   // Restore main screen on exit
   os.signal(os.SIGINT, exit);
@@ -73,7 +78,8 @@ export function onResize(fn) {
 }
 
 export function exit(code = 0) {
-  puts(useMainScreen);
+  // puts(useMainScreen);
+  puts(disableTracking);
   std.exit(code);
 }
 
