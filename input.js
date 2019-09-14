@@ -37,12 +37,14 @@ function* stateMachine(listener) {
             const modFlag = (flags >> 2) & 0b111;
             const buttonFlag = flags & 0b11;
 
-            const event = { type: "mouse", x, y };
-
-            event.mods = {
-              ctrl:  !!(modFlag & 0b100),
-              alt:   !!(modFlag & 0b010),
-              shift: !!(modFlag & 0b001),
+            const event = {
+              type: "mouse",
+              x, y,
+              mods: {
+                ctrl:  !!(modFlag & 0b100),
+                alt:   !!(modFlag & 0b010),
+                shift: !!(modFlag & 0b001),
+              },
             };
 
             switch (typeFlag) {
