@@ -45,6 +45,8 @@ export const disablePaste     = () => { std.out.puts(`\x1b[?2004l`); undo.paste 
 export const enableFocus      = () => { std.out.puts(`\x1b[?1004h`); undo.focus = true; };
 export const disableFocus     = () => { std.out.puts(`\x1b[?1004l`); undo.focus = false; };
 
+export const setTitle         = (title) => std.out.puts(`\x1b]0;${title}\x1b\\`);
+
 export const styles = {
   reset: 0, bright: 1, dim: 2, underscore: 4, blink: 5, reverse: 7, hidden: 8,
   fg: { black: 30, red: 31, green: 32, yellow: 33, blue: 34, magenta: 35, cyan: 36, white: 37, },
