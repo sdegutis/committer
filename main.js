@@ -55,13 +55,15 @@ tty.onResize((w, h) => {
   // tty.puts(tty.clearScreen + tty.moveToTopLeft + w + '\n' + h + '\n');
 });
 
-input.listen().onKey = (c) => {
+input.listen().onKey = (event, args) => {
 
-  switch (c) {
-    case 'z': tty.puts(tty.moveWindowDownOneLine); break;
-    case 'x': tty.puts(tty.moveWindowUpOneLine); break;
-    default: /* tty.puts(c); */ tty.puts(JSON.stringify(c) + '\n');
-  }
+  print(event, JSON.stringify(args));
+
+  // switch (c) {
+  //   case 'z': tty.puts(tty.moveWindowDownOneLine); break;
+  //   case 'x': tty.puts(tty.moveWindowUpOneLine); break;
+  //   default: /* tty.puts(c); */ tty.puts(JSON.stringify(c) + '\n');
+  // }
 
 };
 
