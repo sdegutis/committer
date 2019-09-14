@@ -78,11 +78,14 @@ function* stateMachine(listener) {
         }
         // print(bytesToString(paramBytes) + ' = ' + b + ' = ' + b.toString(16))
       }
-      else if (b === 0x7f) { // delete
-        listener.onKey({ type: "delete" });
-      }
     }
-    // print(b);
+    else if (b === 0x7f) { // delete
+      listener.onKey({ type: "delete" });
+    }
+    else {
+      listener.onKey({ type: 'other', byte: b });
+    }
+  // print(b);
   }
 }
 

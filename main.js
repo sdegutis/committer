@@ -57,7 +57,7 @@ tty.onResize((w, h) => {
 
 input.listen().onKey = (event) => {
   switch (event.type) {
-    // case 'mouse': break;
+    case 'mouse': break;
     default:
       print(JSON.stringify(event));
   }
