@@ -21,15 +21,44 @@ function* stateMachine(listener) {
         }
         switch (b) {
           case 0x4d: // M = mouse event
-            const [a,x,y] = bytesToString(paramBytes).split(';').map(n => parseInt(n, 10));
+            const [flags,x,y] = bytesToString(paramBytes).split(';').map(n => parseInt(n, 10));
 
-            const bits = [];
-            for (let i = 0; i < 32; i++) {
-              const bit = (a >> i) & 1;
-              bits.push(bit);
+            const typeFlag = (flags >> 5) & 0b11;
+            const modFlag = (flags >> 2) & 0b111;
+            const buttonFlag = flags & 0b11;
+
+            const args = {x,y};
+
+            args.mods = {
+              ctrl:  !!(modFlag & 0b100),
+              alt:   !!(modFlag & 0b010),
+              shift: !!(modFlag & 0b001),
+            };
+
+            switch (typeFlag) {
+              case 3: // scroll
+                args.type = 'scroll';
+                args.by = (flags & 1) ? -1 : 1;
+                break;
+              case 2: // move
+                args.type = 'move';
+                break;
+              case 1: // up/down
+                if (buttonFlag === 3) {
+                  args.type = 'release';
+                  // Multiple buttons can be pressed simultaneously,
+                  // but they can be released in any order, and the
+                  // terminal doesn't tell us anything about which.
+                  // But either way, that's buggy in Apple Terminal.
+                }
+                else {
+                  args.type = 'press';
+                  args.button = buttonFlag;
+                }
+                break;
             }
 
-            listener.onKey("mouse", { a,x,y, bits });
+            listener.onKey("mouse", args);
             break;
           case 0x41: // A = up
             listener.onKey('up', {});
