@@ -20,7 +20,7 @@ function* stateMachine(listener) {
           paramBytes.push(b);
         }
         switch (b) {
-          case 0x4d: // M = mouse event
+          case 0x4d: { // M = mouse event
             const [flags,x,y] = bytesToString(paramBytes).split(';').map(n => parseInt(n, 10));
 
             const typeFlag = (flags >> 5) & 0b11;
@@ -60,18 +60,25 @@ function* stateMachine(listener) {
 
             listener.onKey(event);
             break;
+          }
           case 0x41: // A = up
             listener.onKey({ type: 'up' });
             break;
           case 0x42: // B = down
             listener.onKey({ type: 'down' });
             break;
-          case 0x43: // C = right
-            listener.onKey({ type: 'right-arrow', ctrl: paramBytes.length > 0 });
+          case 0x43: { // C = right
+            const event = { type: 'right' };
+            if (paramBytes.length > 0) event.ctrl = true;
+            listener.onKey(event);
             break;
-          case 0x44: // D = left
-            listener.onKey({ type: 'left-arrow', ctrl: paramBytes.length > 0 });
+          }
+          case 0x44: { // D = left
+            const event = { type: 'left' };
+            if (paramBytes.length > 0) event.ctrl = true;
+            listener.onKey(event);
             break;
+          }
           case 0x5a: // Z = shift-tab (???)
             listener.onKey({ type: 'shift-tab' });
             break;
