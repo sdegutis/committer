@@ -63,17 +63,45 @@ tty.onResize((w, h) => {
 input.listen().onKey = (event) => {
 
   if (event.type === 'move') {
-    if (event.where === 'up') {
-      print('start');
-    }
-    else if (event.where === 'down') {
-      print('end');
+    switch (event.where) {
+      case 'up':    tty.moveUp();    std.out.flush(); break;
+      case 'down':  tty.moveDown();  std.out.flush(); break;
+      case 'left':  tty.moveLeft();  std.out.flush(); break;
+      case 'right': tty.moveRight(); std.out.flush(); break;
     }
   }
-  else if (event.type === 'print' && event.char === 'c') {
-    tty.clearScreen();
-    tty.moveTo(1,1);
-    std.out.flush();
+  else if (event.type === 'control') {
+  }
+  else if (event.type === 'print') {
+    if (event.char === 'c') {
+      tty.clearScreen();
+      tty.moveTo(1,1);
+      std.out.flush();
+    }
+    else if (event.char === 'b') {
+      for (let y = 1; y <= window.height; y++) {
+        for (let x = 1; x <= window.width; x++) {
+          if (x === 1 || y === 1 || x === window.width || y === window.height) {
+            tty.moveTo(y, x);
+            // std.out.flush();
+
+            tty.setStyles(tty.styles.bg.blue);
+            // std.out.flush();
+
+            std.out.puts(' ');
+            // std.out.flush();
+
+            tty.setStyles(tty.styles.reset);
+            // std.out.flush();
+          }
+        }
+      }
+      std.out.flush();
+    }
+    else {
+      std.out.puts(event.char);
+      std.out.flush();
+    }
   }
 
   // switch (event.type) {
@@ -116,15 +144,6 @@ input.listen().onKey = (event) => {
 
 //   function draw() {
 //     tty.clearScreen();
-
-//     for (let y = 1; y <= window.height; y++) {
-//       for (let x = 1; x <= window.width; x++) {
-//         if (x === 1 || y === 1 || x === window.width || y === window.height) {
-//           tty.moveTo(y, x);
-//           tty.as([tty.style.bg.blue], () => tty.puts(' '));
-//         }
-//       }
-//     }
 
 //     tty.as([tty.style.fg.red], () => {
 //       tty.moveTo(3, 3); print('window.width =', window.width);
