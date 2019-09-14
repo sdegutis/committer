@@ -43,9 +43,14 @@
 
 
 import * as tty from './tty.js';
+import * as std from 'std';
 import * as input from './input.js';
 
 tty.setup();
+tty.useAltScreen();
+tty.enableMouse();
+std.out.flush();
+
 
 let window = {};
 
@@ -56,11 +61,26 @@ tty.onResize((w, h) => {
 });
 
 input.listen().onKey = (event) => {
-  switch (event.type) {
-    case 'mouse': break;
-    default:
-      print(JSON.stringify(event));
+
+  if (event.type === 'move') {
+    if (event.where === 'up') {
+      print('start');
+    }
+    else if (event.where === 'down') {
+      print('end');
+    }
   }
+  else if (event.type === 'print' && event.char === 'c') {
+    tty.clearScreen();
+    tty.moveTo(1,1);
+    std.out.flush();
+  }
+
+  // switch (event.type) {
+  //   // case 'mouse': break;
+  //   default:
+  //     print(JSON.stringify(event));
+  // }
 
 
   // switch (c) {

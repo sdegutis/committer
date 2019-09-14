@@ -60,10 +60,6 @@ export function setup() {
   // React immediately to keys
   os.ttySetRaw(std.out);
 
-  useAltScreen();
-  enableMouse();
-  std.out.flush();
-
   // Cleanup state on exit
   os.signal(os.SIGINT, exit);
 }
