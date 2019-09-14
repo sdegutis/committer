@@ -16,8 +16,8 @@ export const moveRight        = (lines = 1) => std.out.puts(`${Esc}[${lines}C`);
 export const moveLeft         = (lines = 1) => std.out.puts(`${Esc}[${lines}D`);
 export const moveTo           = (line, col) => std.out.puts(`${Esc}[${line};${col}H`);
 
-export const scrollUp         = (lines = 1) => std.out.puts(`${Esc}${lines}D`);
-export const scrollDown       = (lines = 1) => std.out.puts(`${Esc}${lines}M`);
+export const scrollUp         = () => std.out.puts(`${Esc}D`);
+export const scrollDown       = () => std.out.puts(`${Esc}M`);
 export const moveToNextLine   = () => std.out.puts(`${Esc}E`);
 
 export const saveCursor       = () => std.out.puts(`${Esc}7`);
