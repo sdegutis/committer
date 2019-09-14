@@ -18,14 +18,14 @@ export const keys = {
 };
 
 function isParamByte(b) {
-  return b === 0x3b /* ; */ || (b >= 0x30 && b <= 0x39);
+  return b === 0x3b/* ; */ || (b >= 0x30/* 0 */ && b <= 0x39/* 9 */);
 }
 
 function bytesToString(bs) {
   return bs.map(b=>String.fromCharCode(b)).join('');
 }
 
-function* machine() {
+function* stateMachine() {
   while (true) {
     let b = yield;
     if (b === 0x1b) { // <ESC>
@@ -36,21 +36,34 @@ function* machine() {
           paramBytes.push(b);
         }
         switch (b) {
-          case 0x4d: // M
-            print("mouse event");
+          case 0x4d: // M = mouse event
+            // print("mouse event");
+            break;
+          case 0x41: // A = up
+            break;
+          case 0x42: // B = down
+            break;
+          case 0x43: // C = right
+            break;
+          case 0x44: // D = left
+            break;
+          case 0x5a: // Z = shift-tab (???)
             break;
         }
-        print(bytesToString(paramBytes) + ' = ' + b)
+        // print(bytesToString(paramBytes) + ' = ' + b + ' = ' + b.toString(16))
+      }
+      else if (b === 0x7f) { // delete
+
       }
     }
-    print(b);
+    // print(b);
   }
 }
 
 export function listen() {
 
-  const handler = machine();
-  handler.next();
+  const machine = stateMachine();
+  machine.next();
 
   // let listener = {};
 
@@ -71,10 +84,10 @@ export function listen() {
 
     for (let i = 0; i < bytesRead; i++) {
       const b = array[i];
-      handler.next(b);
+      machine.next(b);
     }
 
-    print(array.slice(0, bytesRead).toLocaleString() + ' ' + JSON.stringify(key));
+    // print(array.slice(0, bytesRead).toLocaleString() + ' ' + JSON.stringify(key));
 
     // if (listener.onKey) {
     //   listener.onKey(key);
