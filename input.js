@@ -94,6 +94,18 @@ function* stateMachine(listener) {
           case 0x5a: // Z = shift-tab (???)
             listener.onKey({ type: 'shift-tab' });
             break;
+          case 0x7e: {// ~
+            // we assume paramBytes === "200~"
+            let buffer = '';
+            while (!buffer.endsWith('\x1b[201~')) {
+              buffer += String.fromCharCode(yield);
+            }
+            const pasted = buffer.slice(0, -6);
+            listener.onKey({ type: 'paste', str: pasted });
+            break;
+          }
+          default:
+            print('unhandled escape code', paramBytes, b);
         }
         // print(bytesToString(paramBytes) + ' = ' + b + ' = ' + b.toString(16))
       }

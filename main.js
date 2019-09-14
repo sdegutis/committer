@@ -50,8 +50,8 @@ tty.setup();
 
 tty.useAltScreen();
 tty.enableMouse();
+tty.enablePaste();
 std.out.flush();
-
 
 let window = {};
 
@@ -70,6 +70,9 @@ input.listen().onKey = (event) => {
       case 'left':  tty.moveLeft();  std.out.flush(); break;
       case 'right': tty.moveRight(); std.out.flush(); break;
     }
+  }
+  else if (event.type === 'paste') {
+    print('pasted!', JSON.stringify(event.str));
   }
   else if (event.type === 'control') {
     if (event.byte === 0x0e) { // ctrl-n (down)
