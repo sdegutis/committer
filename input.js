@@ -58,10 +58,14 @@ function* stateMachine(listener) {
               case 1: // up/down
                 if (buttonFlag === 3) {
                   event.subtype = 'release';
-                  // Multiple buttons can be pressed simultaneously,
-                  // but they can be released in any order, and the
-                  // terminal doesn't tell us anything about which.
-                  // But either way, that's buggy in Apple Terminal.
+                  // In my experience, simultaneous button presses is
+                  // buggy in Apple Terminal. Not sure if it's their
+                  // fault or my code, but either way it's not exactly
+                  // a super useful UI interaction. The xterm man page
+                  // recommends using mode 1006 instead of 1015 which
+                  // does give us more information about which button
+                  // was released, but I already coded this to work with
+                  // 1015, and haven't run into any bugs with it (yet).
                 }
                 else {
                   event.subtype = 'press';
