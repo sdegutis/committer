@@ -1,7 +1,7 @@
 export function makeListener(): Listener;
 
 interface Listener {
-  onKey: (e: Event) => void;
+  onInput: (e: Event) => void;
   readHandler: () => void;
 }
 

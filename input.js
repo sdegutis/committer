@@ -74,29 +74,29 @@ function* stateMachine(listener) {
                 break;
             }
 
-            listener.onKey(event);
+            listener.onInput(event);
             break;
           }
           case 0x41: // A = up
-            listener.onKey({ type: 'move', where: 'up' });
+            listener.onInput({ type: 'move', where: 'up' });
             break;
           case 0x42: // B = down
-            listener.onKey({ type: 'move', where: 'down' });
+            listener.onInput({ type: 'move', where: 'down' });
             break;
           case 0x43: { // C = right
             const event = { type: 'move', where: 'right' };
             if (paramBytes.length > 0) event.ctrl = true;
-            listener.onKey(event);
+            listener.onInput(event);
             break;
           }
           case 0x44: { // D = left
             const event = { type: 'move', where: 'left' };
             if (paramBytes.length > 0) event.ctrl = true;
-            listener.onKey(event);
+            listener.onInput(event);
             break;
           }
           case 0x5a: // Z = shift-tab (???)
-            listener.onKey({ type: 'shift-tab' });
+            listener.onInput({ type: 'shift-tab' });
             break;
           case 0x7e: {// ~
             // we assume paramBytes === "200~"
@@ -105,15 +105,15 @@ function* stateMachine(listener) {
               buffer += String.fromCharCode(yield);
             }
             const pasted = buffer.slice(0, -6);
-            listener.onKey({ type: 'paste', str: pasted });
+            listener.onInput({ type: 'paste', str: pasted });
             break;
           }
           case 0x4f: {
-            listener.onKey({ type: 'unfocus' });
+            listener.onInput({ type: 'unfocus' });
             break;
           }
           case 0x49: {
-            listener.onKey({ type: 'focus' });
+            listener.onInput({ type: 'focus' });
             break;
           }
           default:
@@ -127,16 +127,16 @@ function* stateMachine(listener) {
       }
     }
     else if (b >= 0x00 && b <= 0x1f) {
-      listener.onKey(maybeWithAlt({ type: 'control', byte: b }));
+      listener.onInput(maybeWithAlt({ type: 'control', byte: b }));
     }
     else if (b >= 0x20 && b <= 0x7e) {
-      listener.onKey(maybeWithAlt({ type: 'print', char: String.fromCharCode(b) }));
+      listener.onInput(maybeWithAlt({ type: 'print', char: String.fromCharCode(b) }));
     }
     else if (b === 0x7f) { // delete
-      listener.onKey(maybeWithAlt({ type: "delete" }));
+      listener.onInput(maybeWithAlt({ type: "delete" }));
     }
     else {
-      listener.onKey({ type: 'other', byte: b });
+      listener.onInput({ type: 'other', byte: b });
     }
   // print(b);
   }
@@ -158,7 +158,7 @@ export function makeListener() {
 
     if (bytesRead === 1 && array[0] === 0x1b) {
       // special-case escape by itself
-      listener.onKey({ type: 'escape' });
+      listener.onInput({ type: 'escape' });
       return;
     }
 

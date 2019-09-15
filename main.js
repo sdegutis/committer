@@ -63,10 +63,11 @@ tty.clearScreen();
 std.out.flush();
 
 const window = tty.onResize(() => {
+  print('resized', window.width, window.height);
 });
 
 const inputListener = input.makeListener();
 os.setReadHandler(std.in, inputListener.readHandler);
-inputListener.onKey = (event) => {
-
+inputListener.onInput = (event) => {
+  print('key', JSON.stringify(event));
 };
