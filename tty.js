@@ -10,42 +10,42 @@ const undo = {
   focus: false,
 };
 
-export const moveUp           = (lines = 1) => std.out.puts(`\x1b[${lines}A`);
-export const moveDown         = (lines = 1) => std.out.puts(`\x1b[${lines}B`);
-export const moveRight        = (lines = 1) => std.out.puts(`\x1b[${lines}C`);
-export const moveLeft         = (lines = 1) => std.out.puts(`\x1b[${lines}D`);
-export const moveTo           = (line, col) => std.out.puts(`\x1b[${line};${col}H`);
+export function moveUp           (lines = 1) { std.out.puts(`\x1b[${lines}A`); }
+export function moveDown         (lines = 1) { std.out.puts(`\x1b[${lines}B`); }
+export function moveRight        (lines = 1) { std.out.puts(`\x1b[${lines}C`); }
+export function moveLeft         (lines = 1) { std.out.puts(`\x1b[${lines}D`); }
+export function moveTo           (line, col) { std.out.puts(`\x1b[${line};${col}H`); }
 
-export const scrollUp         = () => std.out.puts(`\x1bD`);
-export const scrollDown       = () => std.out.puts(`\x1bM`);
-export const moveToNextLine   = () => std.out.puts(`\x1bE`);
+export function scrollUp         () { std.out.puts(`\x1bD`); }
+export function scrollDown       () { std.out.puts(`\x1bM`); }
+export function moveToNextLine   () { std.out.puts(`\x1bE`); }
 
-export const saveCursor       = () => std.out.puts(`\x1b7`);
-export const restoreCursor    = () => std.out.puts(`\x1b8`);
+export function saveCursor       () { std.out.puts(`\x1b7`); }
+export function restoreCursor    () { std.out.puts(`\x1b8`); }
 
-export const clearLineRight   = () => std.out.puts(`\x1b[0K`);
-export const clearLineLeft    = () => std.out.puts(`\x1b[1K`);
-export const clearLine        = () => std.out.puts(`\x1b[2K`);
-export const clearScreenDown  = () => std.out.puts(`\x1b[0J`);
-export const clearScreenUp    = () => std.out.puts(`\x1b[1J`);
-export const clearScreen      = () => std.out.puts(`\x1b[2J`);
+export function clearLineRight   () { std.out.puts(`\x1b[0K`); }
+export function clearLineLeft    () { std.out.puts(`\x1b[1K`); }
+export function clearLine        () { std.out.puts(`\x1b[2K`); }
+export function clearScreenDown  () { std.out.puts(`\x1b[0J`); }
+export function clearScreenUp    () { std.out.puts(`\x1b[1J`); }
+export function clearScreen      () { std.out.puts(`\x1b[2J`); }
 
-export const useAltScreen     = () => { std.out.puts(`\x1b[?1049h`); undo.screen = true; };
-export const useMainScreen    = () => { std.out.puts(`\x1b[?1049l`); undo.screen = false; };
+export function useAltScreen     () { std.out.puts(`\x1b[?1049h`); undo.screen = true; }
+export function useMainScreen    () { std.out.puts(`\x1b[?1049l`); undo.screen = false; }
 
-export const hideCursor       = () => { std.out.puts(`\x1b[?25l`); undo.cursor = true; };
-export const showCursor       = () => { std.out.puts(`\x1b[?25h`); undo.cursor = false; };
+export function hideCursor       () { std.out.puts(`\x1b[?25l`); undo.cursor = true; }
+export function showCursor       () { std.out.puts(`\x1b[?25h`); undo.cursor = false; }
 
-export const enableMouse      = () => { std.out.puts(`\x1b[?1000;1003;1006;1015h`); undo.mouse = true; };
-export const disableMouse     = () => { std.out.puts(`\x1b[?1000;1003;1006;1015l`); undo.mouse = false; };
+export function enableMouse      () { std.out.puts(`\x1b[?1000;1003;1006;1015h`); undo.mouse = true; }
+export function disableMouse     () { std.out.puts(`\x1b[?1000;1003;1006;1015l`); undo.mouse = false; }
 
-export const enablePaste      = () => { std.out.puts(`\x1b[?2004h`); undo.paste = true; };
-export const disablePaste     = () => { std.out.puts(`\x1b[?2004l`); undo.paste = false; };
+export function enablePaste      () { std.out.puts(`\x1b[?2004h`); undo.paste = true; }
+export function disablePaste     () { std.out.puts(`\x1b[?2004l`); undo.paste = false; }
 
-export const enableFocus      = () => { std.out.puts(`\x1b[?1004h`); undo.focus = true; };
-export const disableFocus     = () => { std.out.puts(`\x1b[?1004l`); undo.focus = false; };
+export function enableFocus      () { std.out.puts(`\x1b[?1004h`); undo.focus = true; }
+export function disableFocus     () { std.out.puts(`\x1b[?1004l`); undo.focus = false; }
 
-export const setTitle         = (title) => std.out.puts(`\x1b]0;${title}\x1b\\`);
+export function setTitle         (title) { std.out.puts(`\x1b]0;${title}\x1b\\`); }
 
 export const styles = {
   reset: 0, bright: 1, dim: 2, underscore: 4, blink: 5, reverse: 7, hidden: 8,
@@ -53,11 +53,11 @@ export const styles = {
   bg: { black: 40, red: 41, green: 42, yellow: 43, blue: 44, magenta: 45, cyan: 46, white: 47, },
 };
 
-export const setStyles = (...items) => {
+export function setStyles(...items) {
   if (items.length === 0) return;
   undo.style = (items[items.length - 1] !== styles.reset);
   std.out.puts(`\x1b[${items.join(';')}m`);
-};
+}
 
 export function setup() {
   // Quit if not usable
