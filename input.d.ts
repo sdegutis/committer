@@ -10,6 +10,7 @@ type Event = { type: 'move', where: 'up' | 'down' | 'left' | 'right' }
            | { type: 'print', char: string, alt?: boolean }
            | { type: 'delete', alt?: boolean }
            | { type: 'shift-tab' }
+           | { type: 'escape' }
            | { type: 'focus' }
            | { type: 'unfocus' }
            | { type: 'mouse', x: number, y: number,
