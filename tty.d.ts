@@ -50,6 +50,6 @@ interface Size {
   height: number;
 }
 
-export function onResize(fn: () => void): Size;
+export function onResize(fn: () => void | null): Size;
 
 export function cleanup(): void;

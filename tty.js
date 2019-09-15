@@ -79,12 +79,12 @@ export function onResize(fn) {
   size.height = height;
 
   const SIGWINCH = 28;
-  os.signal(SIGWINCH, () => {
+  os.signal(SIGWINCH, fn ? () => {
     const [width, height] = os.ttyGetWinSize(std.out);
     size.width = width;
     size.height = height;
     fn();
-  });
+  } : null);
 
   return size;
 }
