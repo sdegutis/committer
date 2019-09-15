@@ -49,6 +49,11 @@ import * as input from './input.js';
 
 tty.setup();
 
+os.signal(os.SIGINT, () => {
+  tty.cleanup();
+  std.exit(0);
+});
+
 tty.useAltScreen();
 tty.enableMouse();
 tty.enablePaste();
@@ -120,6 +125,7 @@ inputListener.onKey = (event) => {
       box();
     }
     else {
+      tty.setStyles(tty.styles.bg.cyan, tty.styles.fg.black, tty.styles.underscore);
       std.out.puts(event.char);
       std.out.flush();
     }
