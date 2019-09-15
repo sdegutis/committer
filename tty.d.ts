@@ -52,4 +52,4 @@ interface Size {
 
 export function onResize(fn: () => void): Size;
 
-export function exit(code = 0): never;
+export function cleanup(): void;

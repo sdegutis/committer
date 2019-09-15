@@ -69,9 +69,6 @@ export function setup() {
 
   // React immediately to keys
   os.ttySetRaw(std.out);
-
-  // Cleanup state on exit
-  os.signal(os.SIGINT, exit);
 }
 
 export function onResize(fn) {
@@ -92,10 +89,10 @@ export function onResize(fn) {
   return size;
 }
 
-export function exit(code = 0) {
-  for (const fn of Object.values(undo)) {
+export function cleanup() {
+  for (const [key, fn] of Object.entries(undo)) {
     if (fn) fn();
+    undo.key = null; // reset everything
   }
   std.out.flush();
-  std.exit(code);
 }
