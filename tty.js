@@ -73,16 +73,21 @@ export function setup() {
 }
 
 export function onResize(fn) {
-  // Call immediately
-  const [width, height] = os.ttyGetWinSize(std.out);
-  fn(width, height);
+  const size = {};
 
-  // Install resize handler
+  const [width, height] = os.ttyGetWinSize(std.out);
+  size.width = width;
+  size.height = height;
+
   const SIGWINCH = 28;
   os.signal(SIGWINCH, () => {
     const [width, height] = os.ttyGetWinSize(std.out);
-    fn(width, height);
+    size.width = width;
+    size.height = height;
+    fn();
   });
+
+  return size;
 }
 
 export function exit(code = 0) {

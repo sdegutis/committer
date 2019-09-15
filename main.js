@@ -55,13 +55,23 @@ tty.enableFocus();
 tty.hideCursor();
 std.out.flush();
 
-let window = {};
-
-tty.onResize((w, h) => {
-  window.width = w;
-  window.height = h;
-  // tty.puts(tty.clearScreen + tty.moveToTopLeft + w + '\n' + h + '\n');
+const window = tty.onResize(() => {
+  box();
 });
+
+function box() {
+  tty.setStyles(tty.styles.bg.blue);
+  for (let y = 1; y <= window.height; y++) {
+    for (let x = 1; x <= window.width; x++) {
+      if (x === 1 || y === 1 || x === window.width || y === window.height) {
+        tty.moveTo(y, x);
+        std.out.puts(' ');
+      }
+    }
+  }
+  tty.setStyles(tty.styles.reset);
+  std.out.flush();
+}
 
 input.listen().onKey = (event) => {
 
@@ -104,17 +114,7 @@ input.listen().onKey = (event) => {
       std.out.flush();
     }
     else if (event.char === 'b') {
-      tty.setStyles(tty.styles.bg.blue);
-      for (let y = 1; y <= window.height; y++) {
-        for (let x = 1; x <= window.width; x++) {
-          if (x === 1 || y === 1 || x === window.width || y === window.height) {
-            tty.moveTo(y, x);
-            std.out.puts(' ');
-          }
-        }
-      }
-      tty.setStyles(tty.styles.reset);
-      std.out.flush();
+      box();
     }
     else {
       std.out.puts(event.char);
