@@ -52,6 +52,7 @@ tty.useAltScreen();
 tty.enableMouse();
 tty.enablePaste();
 tty.enableFocus();
+tty.hideCursor();
 std.out.flush();
 
 let window = {};
@@ -92,36 +93,38 @@ input.listen().onKey = (event) => {
       std.out.flush();
     }
     else if (event.char === 'r') {
-      for (let row = 2; row < window.height-1; row++) {
-        for (let col = 2; col < window.width-1; col++) {
+      tty.setStyles(tty.styles.fg.green, tty.styles.dim);
+      for (let row = 2; row < window.height; row++) {
+        for (let col = 2; col < window.width; col++) {
           tty.moveTo(row,col);
-          std.out.puts('a');
+          std.out.puts('x');
         }
       }
+      tty.setStyles(tty.styles.reset);
       std.out.flush();
     }
     else if (event.char === 'b') {
+      tty.setStyles(tty.styles.bg.blue);
       for (let y = 1; y <= window.height; y++) {
         for (let x = 1; x <= window.width; x++) {
           if (x === 1 || y === 1 || x === window.width || y === window.height) {
             tty.moveTo(y, x);
-            // std.out.flush();
-
-            tty.setStyles(tty.styles.bg.blue);
-            // std.out.flush();
-
             std.out.puts(' ');
-            // std.out.flush();
-
-            tty.setStyles(tty.styles.reset);
-            // std.out.flush();
           }
         }
       }
+      tty.setStyles(tty.styles.reset);
       std.out.flush();
     }
     else {
       std.out.puts(event.char);
+      std.out.flush();
+    }
+  }
+  else if (event.type === 'mouse') {
+    if (event.subtype === 'move') {
+      const {x,y} = event;
+      tty.moveTo(y,x);
       std.out.flush();
     }
   }

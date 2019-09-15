@@ -170,7 +170,7 @@ export function listen() {
       }
     }
 
-    print(array.slice(0, bytesRead).toLocaleString() + ' ' + JSON.stringify(key));
+    // print(array.slice(0, bytesRead).toLocaleString() + ' ' + JSON.stringify(key));
   });
 
   return listener;
