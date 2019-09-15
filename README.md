@@ -51,25 +51,25 @@ interface Listener {
   readHandler: () => void;
 }
 
-type Event = { type: 'move', where: 'up' | 'down' | 'left' | 'right' }
-           | { type: 'paste', str: string }
-           | { type: 'control', byte: number, alt?: boolean }
-           | { type: 'print', char: string, alt?: boolean }
-           | { type: 'delete', alt?: boolean }
-           | { type: 'shift-tab' }
-           | { type: 'escape' }
-           | { type: 'focus' }
-           | { type: 'unfocus' }
+type Event = { type: 'move',  where: 'up' | 'down' | 'left' | 'right' }
+           | { type: 'paste',   str: string                           }
+           | { type: 'control', byte: number, alt?: boolean           }
+           | { type: 'print',   char: string, alt?: boolean           }
+           | { type: 'delete',                alt?: boolean           }
+           | { type: 'shift-tab'                                      }
+           | { type: 'escape'                                         }
+           | { type: 'focus'                                          }
+           | { type: 'unfocus'                                        }
            | { type: 'mouse', x: number, y: number,
                mods: {
-                 ctrl: boolean,
-                 alt: boolean,
+                 ctrl:  boolean,
+                 alt:   boolean,
                  shift: boolean,
                } } &
-               ( { subtype: 'scroll', by: 1 | -1 }
-               | { subtype: 'move' }
+               ( { subtype: 'scroll', by: 1 | -1    }
+               | { subtype: 'move'                  }
                | { subtype: 'press', button: number }
-               | { subtype: 'release' } )
+               | { subtype: 'release'               } )
            | { type: 'other', byte: number }
            ;
 ```
@@ -191,4 +191,4 @@ export function cleanup(): void;
 
 ## License
 
-MIT, with the added clause that you try to think seriously about the purpose of life
+MIT, with the request that you think in silence about the meaning of life for an hour sometime this week
