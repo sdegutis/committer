@@ -16,15 +16,28 @@ I guess I'm more of an API builder than an app builder, so in trying to create t
 #### Usage
 
 ```typescript
-// listening
-
+// create listener
 const inputListener = input.makeListener();
-os.setReadHandler(std.in, inputListener.readHandler);
+
+// set key handler
 inputListener.onKey = (event) => {
-  // handle event
+  switch (event.type) {
+    case 'mouse': {
+      // ...
+      break;
+    }
+    case 'move': {
+      // ...
+      break;
+    }
+    // ...
+  }
 };
 
-// un-listening
+// register it
+os.setReadHandler(std.in, inputListener.readHandler);
+
+// un-register it
 os.setReadHandler(std.in, null);
 ```
 
