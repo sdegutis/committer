@@ -2,12 +2,12 @@ import * as std from 'std';
 import * as os from 'os';
 
 const undo = {
-  screen: false,
-  cursor: false,
-  mouse: false,
-  style: false,
-  paste: false,
-  focus: false,
+  screen: null,
+  cursor: null,
+  mouse: null,
+  style: null,
+  paste: null,
+  focus: null,
 };
 
 export function moveUp           (lines = 1) { std.out.puts(`\x1b[${lines}A`); }
@@ -30,20 +30,20 @@ export function clearScreenDown  () { std.out.puts(`\x1b[0J`); }
 export function clearScreenUp    () { std.out.puts(`\x1b[1J`); }
 export function clearScreen      () { std.out.puts(`\x1b[2J`); }
 
-export function useAltScreen     () { std.out.puts(`\x1b[?1049h`); undo.screen = true; }
-export function useMainScreen    () { std.out.puts(`\x1b[?1049l`); undo.screen = false; }
+export function useAltScreen     () { std.out.puts(`\x1b[?1049h`); undo.screen = useMainScreen; }
+export function useMainScreen    () { std.out.puts(`\x1b[?1049l`); undo.screen = null; }
 
-export function hideCursor       () { std.out.puts(`\x1b[?25l`); undo.cursor = true; }
-export function showCursor       () { std.out.puts(`\x1b[?25h`); undo.cursor = false; }
+export function hideCursor       () { std.out.puts(`\x1b[?25l`); undo.cursor = showCursor; }
+export function showCursor       () { std.out.puts(`\x1b[?25h`); undo.cursor = null; }
 
-export function enableMouse      () { std.out.puts(`\x1b[?1000;1003;1006;1015h`); undo.mouse = true; }
-export function disableMouse     () { std.out.puts(`\x1b[?1000;1003;1006;1015l`); undo.mouse = false; }
+export function enableMouse      () { std.out.puts(`\x1b[?1000;1003;1006;1015h`); undo.mouse = disableMouse; }
+export function disableMouse     () { std.out.puts(`\x1b[?1000;1003;1006;1015l`); undo.mouse = null; }
 
-export function enablePaste      () { std.out.puts(`\x1b[?2004h`); undo.paste = true; }
-export function disablePaste     () { std.out.puts(`\x1b[?2004l`); undo.paste = false; }
+export function enablePaste      () { std.out.puts(`\x1b[?2004h`); undo.paste = disablePaste; }
+export function disablePaste     () { std.out.puts(`\x1b[?2004l`); undo.paste = null; }
 
-export function enableFocus      () { std.out.puts(`\x1b[?1004h`); undo.focus = true; }
-export function disableFocus     () { std.out.puts(`\x1b[?1004l`); undo.focus = false; }
+export function enableFocus      () { std.out.puts(`\x1b[?1004h`); undo.focus = disableFocus; }
+export function disableFocus     () { std.out.puts(`\x1b[?1004l`); undo.focus = null; }
 
 export function setTitle         (title) { std.out.puts(`\x1b]0;${title}\x1b\\`); }
 
@@ -55,7 +55,9 @@ export const styles = {
 
 export function setStyles(...items) {
   if (items.length === 0) return;
-  undo.style = (items[items.length - 1] !== styles.reset);
+  undo.style = (items[items.length - 1] !== styles.reset)
+    ? () => setStyles(styles.reset)
+    : null;
   std.out.puts(`\x1b[${items.join(';')}m`);
 }
 
@@ -91,12 +93,9 @@ export function onResize(fn) {
 }
 
 export function exit(code = 0) {
-  if (undo.screen) useMainScreen();
-  if (undo.cursor) showCursor();
-  if (undo.mouse) disableMouse();
-  if (undo.style) setStyles(styles.reset);
-  if (undo.paste) disablePaste();
-  if (undo.focus) disableFocus();
+  for (const fn of Object.values(undo)) {
+    if (fn) fn();
+  }
   std.out.flush();
   std.exit(code);
 }
