@@ -51,16 +51,10 @@ interface Listener {
   readHandler: () => void;
 }
 
-type Event = { type: 'move',  where: 'up' | 'down' | 'left' | 'right' }
-           | { type: 'paste',   str: string                           }
-           | { type: 'control', byte: number, alt?: boolean           }
-           | { type: 'print',   char: string, alt?: boolean           }
-           | { type: 'delete',                alt?: boolean           }
-           | { type: 'shift-tab'                                      }
-           | { type: 'escape'                                         }
-           | { type: 'focus'                                          }
-           | { type: 'unfocus'                                        }
-           | { type: 'mouse', x: number, y: number,
+type Event = { type: 'move', where: 'up' | 'down' | 'left' | 'right' }
+           | { type: 'mouse',
+               col: number,
+               row: number,
                mods: {
                  ctrl:  boolean,
                  alt:   boolean,
@@ -70,7 +64,15 @@ type Event = { type: 'move',  where: 'up' | 'down' | 'left' | 'right' }
                | { subtype: 'move'                  }
                | { subtype: 'press', button: number }
                | { subtype: 'release'               } )
-           | { type: 'other', byte: number }
+           | { type: 'control', byte: number, alt?: boolean }
+           | { type: 'print',   char: string, alt?: boolean }
+           | { type: 'delete',                alt?: boolean }
+           | { type: 'paste',   str: string }
+           | { type: 'shift-tab'            }
+           | { type: 'escape'               }
+           | { type: 'focus'                }
+           | { type: 'unfocus'              }
+           | { type: 'other', byte: number  }
            ;
 ```
 
