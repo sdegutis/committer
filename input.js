@@ -168,9 +168,7 @@ export function listen() {
       const backupBy = machine.next(b).value;
       if (backupBy) {
         i += backupBy;
-        // can't really exit, may need tty cleanup etc
-        if (i < 0) print("Error! Escape code state machine backed up too far!");
-        machine.next(); // push it forward
+        machine.next(); // push machine forward
       }
     }
 
