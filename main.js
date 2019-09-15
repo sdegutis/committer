@@ -127,6 +127,9 @@ input.listen().onKey = (event) => {
       tty.moveTo(y,x);
       std.out.flush();
     }
+    // else if (event.subtype === 'press') {
+    //   event.button
+    // }
   }
 
   // switch (event.type) {
