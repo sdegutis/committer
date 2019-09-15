@@ -44,6 +44,7 @@
 
 import * as tty from './tty.js';
 import * as std from 'std';
+import * as os from 'os';
 import * as input from './input.js';
 
 tty.setup();
@@ -73,7 +74,9 @@ function box() {
   std.out.flush();
 }
 
-input.listen().onKey = (event) => {
+const inputListener = input.makeListener();
+os.setReadHandler(std.in, inputListener.readHandler);
+inputListener.onKey = (event) => {
 
   if (event.type === 'move') {
     switch (event.where) {

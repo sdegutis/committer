@@ -142,13 +142,12 @@ function* stateMachine(listener) {
   }
 }
 
-export function listen() {
+export function makeListener() {
   let listener = {};
   const machine = stateMachine(listener);
   machine.next();
 
-
-  os.setReadHandler(std.in, () => {
+  listener.readHandler = () => {
     const array = new Uint8Array(64);
     const bytesRead = os.read(std.in, array.buffer, 0, array.length);
 
@@ -173,7 +172,7 @@ export function listen() {
     }
 
     // print(array.slice(0, bytesRead).toLocaleString() + ' ' + JSON.stringify(key));
-  });
+  };
 
   return listener;
 }

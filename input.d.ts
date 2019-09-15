@@ -1,7 +1,8 @@
-export function listen(): Listener;
+export function makeListener(): Listener;
 
 interface Listener {
   onKey: (e: Event) => void;
+  readHandler: () => void;
 }
 
 type Event = { type: 'move', where: 'up' | 'down' | 'left' | 'right' }
