@@ -5,7 +5,14 @@ RETRO 3000
 
 ---
 
-## Demo usage
+## Demo
+
+```bash
+$ brew install quickjs
+$ qjs demo.js
+```
+
+Contents of `demo.js`:
 
 ```typescript
 import * as std from 'std';
@@ -35,8 +42,51 @@ const window = tty.onResize(() => {
 const inputListener = input.makeListener();
 os.setReadHandler(std.in, inputListener.readHandler);
 inputListener.onInput = (event) => {
-  print('key', JSON.stringify(event));
+  print(JSON.stringify(event));
 };
+```
+
+Sample output:
+
+```
+{"type":"print","char":"h"}
+{"type":"print","char":"e"}
+{"type":"print","char":"l"}
+{"type":"print","char":"l"}
+{"type":"print","char":"o"}
+{"type":"print","char":"w"}
+{"type":"delete"}
+{"type":"print","char":" "}
+{"type":"print","char":"w"}
+{"type":"print","char":"o"}
+{"type":"print","char":"r"}
+{"type":"print","char":"l"}
+{"type":"print","char":"d"}
+{"type":"print","char":"!"}
+{"type":"control","byte":14}
+{"type":"control","byte":14}
+{"type":"control","byte":16}
+{"type":"move","where":"up"}
+{"type":"move","where":"left"}
+{"type":"move","where":"right"}
+{"type":"move","where":"down"}
+{"type":"escape"}
+{"type":"mouse","x":39,"y":44,"mods":{"ctrl":false,"alt":false,"shift":false},"subtype":"move"}
+{"type":"mouse","x":39,"y":43,"mods":{"ctrl":false,"alt":false,"shift":false},"subtype":"move"}
+{"type":"mouse","x":38,"y":43,"mods":{"ctrl":false,"alt":false,"shift":false},"subtype":"move"}
+{"type":"mouse","x":38,"y":42,"mods":{"ctrl":false,"alt":false,"shift":false},"subtype":"move"}
+{"type":"mouse","x":37,"y":42,"mods":{"ctrl":false,"alt":false,"shift":false},"subtype":"move"}
+{"type":"mouse","x":37,"y":42,"mods":{"ctrl":false,"alt":false,"shift":false},"subtype":"press","button":0}
+{"type":"mouse","x":37,"y":42,"mods":{"ctrl":false,"alt":false,"shift":false},"subtype":"release"}
+{"type":"unfocus"}
+{"type":"focus"}
+{"type":"mouse","x":38,"y":42,"mods":{"ctrl":false,"alt":false,"shift":false},"subtype":"move"}
+{"type":"mouse","x":38,"y":42,"mods":{"ctrl":false,"alt":false,"shift":false},"subtype":"press","button":0}
+{"type":"mouse","x":39,"y":42,"mods":{"ctrl":false,"alt":false,"shift":false},"subtype":"move"}
+{"type":"mouse","x":40,"y":42,"mods":{"ctrl":false,"alt":false,"shift":false},"subtype":"move"}
+{"type":"mouse","x":41,"y":42,"mods":{"ctrl":false,"alt":false,"shift":false},"subtype":"move"}
+{"type":"mouse","x":41,"y":41,"mods":{"ctrl":false,"alt":false,"shift":false},"subtype":"move"}
+{"type":"mouse","x":41,"y":41,"mods":{"ctrl":false,"alt":false,"shift":false},"subtype":"release"}
 ```
 
 ## Modules
