@@ -69,6 +69,32 @@ import * as os from 'os';
 import * as tty from './r3k/tty.js';
 import * as input from './r3k/input.js';
 
+class Glyph {
+
+  constructor(c, styles) {
+    this.c = c;
+    this.styles = styles;
+  }
+
+}
+
+class Buffer {
+
+  constructor(str) {
+    this.lines = []; // array of arrays of glyphs
+    this.lines.push(str.split('').map(c => new Glyph(c, [])));
+  }
+
+}
+
+class View {
+
+  constructor(buffer) {
+    this.buffer = buffer;
+  }
+
+}
+
 class App {
 
   setup() {
@@ -79,28 +105,40 @@ class App {
       std.exit(0);
     });
 
+    this.window = tty.onResize(this.onResize.bind(this));
+    this.views = [];
+
+    const inputListener = input.makeListener();
+    os.setReadHandler(std.in, inputListener.readHandler);
+    inputListener.onInput = this.onInput.bind(this);
+
     tty.useAltScreen();
     tty.enableMouse();
     tty.enablePaste();
     tty.enableFocus();
     tty.hideCursor();
-    tty.clearScreen();
     std.out.flush();
 
-    this.window = tty.onResize(this.onResize.bind(this));
+    this.views.push(new View(
+      new Buffer('hello world')
+    ));
 
-    const inputListener = input.makeListener();
-    os.setReadHandler(std.in, inputListener.readHandler);
-    inputListener.onInput = this.onInput.bind(this);
+    this.redrawAll();
   }
 
   onResize() {
-    print('resized', this.window.width, this.window.height);
+    this.redrawAll();
   }
 
   onInput(event) {
     print(input.code(event));
     // print('key', JSON.stringify(event));
+  }
+
+  redrawAll() {
+    tty.clearScreen();
+    tty.moveTo(1, 1);
+    std.out.flush();
   }
 
 }
