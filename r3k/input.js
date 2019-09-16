@@ -39,7 +39,8 @@ function* stateMachine(listener) {
 
             const event = {
               type: "mouse",
-              x, y,
+              col: x,
+              row: y,
               mods: {
                 ctrl:  !!(modFlag & 0b100),
                 alt:   !!(modFlag & 0b010),
