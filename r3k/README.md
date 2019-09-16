@@ -83,8 +83,8 @@ interface Listener {
 
 type Event = { type: 'move', where: 'up' | 'down' | 'left' | 'right' }
            | { type: 'mouse',
-               col: number,
-               row: number,
+               x: number,
+               y: number,
                mods: {
                  ctrl:  boolean,
                  alt:   boolean,
