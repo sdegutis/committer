@@ -28,3 +28,8 @@ type Event = { type: 'move', where: 'up' | 'down' | 'left' | 'right' }
            | { type: 'unfocus'              }
            | { type: 'other', byte: number  }
            ;
+
+// Useful for creating event dispatchers.
+// Note: doesn't convey all info (e.g. mouse col/row),
+//       only indentifying info e.g. "mouse-down1"
+export function code(event: Event): string;

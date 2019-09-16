@@ -176,3 +176,46 @@ export function makeListener() {
 
   return listener;
 }
+
+export function code(event) {
+  switch (event.type) {
+    case 'move':
+      return event.where;
+    case 'shift-tab':
+      return 'S-tab';
+    case 'delete':
+      return (event.alt ? 'M-' : '') + 'delete';
+    case 'paste':
+    case 'escape':
+    case 'focus':
+    case 'unfocus':
+    case 'other':
+      return event.type;
+    case 'control': {
+      let prefix = 'C-';
+      if (event.alt) prefix += 'M-';
+      return prefix + (event.byte === 0
+        ? 'space'
+        : String.fromCharCode(event.byte - 1 + 97));
+    }
+    case 'print': {
+      let prefix = '';
+      if (event.alt) prefix = 'M-';
+      if (event.char === ' ') return prefix + 'space';
+      return prefix + event.char;
+    }
+    case 'mouse': {
+      let prefix = '';
+      if (event.mods.ctrl)  prefix += 'C-';
+      if (event.mods.alt)   prefix += 'M-';
+      if (event.mods.shift) prefix += 'S-';
+      prefix += 'mouse-';
+      switch (event.subtype) {
+        case 'scroll':  return prefix + (event.by > 0 ? 'scrollup' : 'scrolldown');
+        case 'move':    return prefix + 'move';
+        case 'release': return prefix + 'up';
+        case 'press':   return prefix + (event.button === 0 ? 'down1' : 'down2');
+      }
+    }
+  }
+}

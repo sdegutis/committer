@@ -69,5 +69,6 @@ const window = tty.onResize(() => {
 const inputListener = input.makeListener();
 os.setReadHandler(std.in, inputListener.readHandler);
 inputListener.onInput = (event) => {
-  print('key', JSON.stringify(event));
+  print(input.code(event));
+  // print('key', JSON.stringify(event));
 };
