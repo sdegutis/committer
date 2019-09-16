@@ -77,8 +77,26 @@ class Buffer {
 
 class View {
 
-  constructor(buffer) {
+  constructor(buffer, x, y, w, h) {
     this.buffer = buffer;
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+  }
+
+  redraw() {
+    tty.setStyles(tty.styles.bg.blue);
+    for (let y = this.y; y < this.y + this.h; y++) {
+      for (let x = this.x; x < this.x + this.w; x++) {
+        if (y === this.y || y === this.y + this.h-1 || x === this.x || x === this.x + this.w-1) {
+          tty.moveTo(y, x);
+          std.out.puts(' ');
+        }
+      }
+    }
+    tty.setStyles(tty.styles.reset);
+    std.out.flush();
   }
 
 }
@@ -108,7 +126,9 @@ class App {
     std.out.flush();
 
     this.views.push(new View(
-      new Buffer('hello world')
+      new Buffer('hello world'),
+      1, 1,
+      this.window.width, this.window.height
     ));
 
     this.redrawAll();
@@ -120,11 +140,16 @@ class App {
 
   onInput(event) {
     print(input.code(event));
-    // print('key', JSON.stringify(event));
+    print('key', JSON.stringify(event));
   }
 
   redrawAll() {
     tty.clearScreen();
+
+    for (const view of this.views) {
+      view.redraw();
+    }
+
     tty.moveTo(1, 1);
     std.out.flush();
   }
