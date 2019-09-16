@@ -44,8 +44,8 @@
 
 import * as std from 'std';
 import * as os from 'os';
-import * as tty from './tty.js';
-import * as input from './input.js';
+import * as tty from './r3k/tty.js';
+import * as input from './r3k/input.js';
 
 tty.setup();
 
