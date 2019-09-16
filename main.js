@@ -69,28 +69,40 @@ import * as os from 'os';
 import * as tty from './r3k/tty.js';
 import * as input from './r3k/input.js';
 
-tty.setup();
+class App {
 
-os.signal(os.SIGINT, () => {
-  tty.cleanup();
-  std.exit(0);
-});
+  setup() {
+    tty.setup();
 
-tty.useAltScreen();
-tty.enableMouse();
-tty.enablePaste();
-tty.enableFocus();
-tty.hideCursor();
-tty.clearScreen();
-std.out.flush();
+    os.signal(os.SIGINT, () => {
+      tty.cleanup();
+      std.exit(0);
+    });
 
-const window = tty.onResize(() => {
-  print('resized', window.width, window.height);
-});
+    tty.useAltScreen();
+    tty.enableMouse();
+    tty.enablePaste();
+    tty.enableFocus();
+    tty.hideCursor();
+    tty.clearScreen();
+    std.out.flush();
 
-const inputListener = input.makeListener();
-os.setReadHandler(std.in, inputListener.readHandler);
-inputListener.onInput = (event) => {
-  print(input.code(event));
-  // print('key', JSON.stringify(event));
-};
+    this.window = tty.onResize(this.onResize.bind(this));
+
+    const inputListener = input.makeListener();
+    os.setReadHandler(std.in, inputListener.readHandler);
+    inputListener.onInput = this.onInput.bind(this);
+  }
+
+  onResize() {
+    print('resized', this.window.width, this.window.height);
+  }
+
+  onInput(event) {
+    print(input.code(event));
+    // print('key', JSON.stringify(event));
+  }
+
+}
+
+new App().setup();
